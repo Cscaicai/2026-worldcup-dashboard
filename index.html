@@ -521,8 +521,27 @@ function genPred(homeRank, awayRank, stage) {
   let pool = SCORE_POOLS[key];
   if (!pool) pool = SCORE_POOLS['3v3'];
   
-  // 如果是强对弱，主场优势可能导致反转（较弱一方主场标注为home时也有微调）
-  // 但我们已经用ht,at决定了强弱，不反转
+  // 同一档内也按排名细分：排名差越大，强队赢面越大
+  let rankDiff = awayRank - homeRank; // 正数=主场更强
+  let adjustPool = false;
+  if (ht === at && Math.abs(rankDiff) > 2) {
+    // 同档内仍有3位以上排名差：把部分权重从弱队向强队转移
+    adjustPool = true;
+    pool = pool.map(s => {
+      let hWin = s[0] > s[1];
+      let aWin = s[1] > s[0];
+      let weightAdj = 0;
+      if (rankDiff > 0) { // home stronger
+        if (hWin) weightAdj = Math.min(8, Math.floor(rankDiff * 0.6));
+        else if (aWin) weightAdj = -Math.min(8, Math.floor(rankDiff * 0.6));
+      } else { // away stronger
+        if (aWin) weightAdj = Math.min(8, Math.floor(Math.abs(rankDiff) * 0.6));
+        else if (hWin) weightAdj = -Math.min(8, Math.floor(Math.abs(rankDiff) * 0.6));
+      }
+      return [s[0], s[1], Math.max(1, s[2] + weightAdj)];
+    });
+  }
+  
   let totalWeight = pool.reduce((s, x) => s + x[2], 0);
   let roll = Math.random() * totalWeight;
   let cum = 0;
@@ -532,11 +551,11 @@ function genPred(homeRank, awayRank, stage) {
     if (roll <= cum) { hg = s[0]; ag = s[1]; break; }
   }
   
-  // 可靠度：基于实力差距 + 淘汰赛降低
+  // 可靠度
   let diff = Math.abs(ht - at);
-  let relBase = [50, 60, 72, 82][diff]; // 同档50%, 差一档60%, 两档72%, 三档82%
+  let relBase = [50, 60, 72, 82][diff];
+  if (adjustPool && Math.abs(rankDiff) > 5) relBase += 8; // 同一档内差距大也提高可靠度
   if (stage === 'knockout') relBase = Math.min(relBase, 65);
-  // 加一点抖动
   let reliability = Math.round(Math.min(92, Math.max(35, relBase + (Math.random()*10-5))));
   
   return {score:[hg, ag], reliability};
@@ -813,16 +832,15 @@ function renderMatch(m) {
   let isLive = !isDone && (m.timestamp <= now) && (m.timestamp + 7200000 > now);
   let cls = 'match-card' + (isDone?' done':'') + (isLive?' live':'') + (!isDone && !isLive?' upcoming':'') + (m.isKnockout?' knockout':'');
 
-  // Convert ET to BJT (Beijing Time = ET + 12h)
+  // 美东时间 → 北京时间显示 (BJT = ET + 12h)
   let etHour = parseInt(m.time.split(':')[0]);
   let etMin = m.time.split(':')[1];
   let bjtHour = (etHour + 12) % 24;
-  let bjtDate = bjtHour < etHour ? new Date(m.date + 'T00:00:00Z').getTime() + 86400000 : new Date(m.date + 'T00:00:00Z').getTime();
-  let timeStr = `${bjtHour.toString().padStart(2,'0')}:${etMin}`;
-  let dateObj = new Date(m.date);
-  let month = dateObj.toLocaleString('zh-CN',{month:'numeric'})+'月';
-  let day = dateObj.getDate();
+  let timeBjt = `${bjtHour.toString().padStart(2,'0')}:${etMin}`;
 
+  let dateObj = new Date(m.date);
+  let month = dateObj.getMonth() + 1;
+  let day = dateObj.getDate();
   // Home flag
   let homeFlagHtml = '<span style="font-size:32px;line-height:1">❓</span>';
   if (!isTBD) {
@@ -894,7 +912,7 @@ function renderMatch(m) {
 
   return `<div class="${cls}">
     <div class="match-time-col">
-      <div class="time">${month} ${day} · ${timeStr} <span style="font-size:0.65rem;font-weight:400;color:var(--text-muted)">BJ</span></div>
+      <div class="time">${month}月${day}日 · ${timeBjt} <span style="font-size:0.65rem;font-weight:400;color:var(--text-muted)">BJ</span></div>
       <div class="round-badge">${roundLabel}</div>
       ${statusHtml}
       <div class="venue">${venueShort}</div>
