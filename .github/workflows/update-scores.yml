@@ -1,0 +1,48 @@
+name: 自动更新比分
+
+on:
+  # 定时运行：每天 4次（美东时间 0点/6点/12点/18点 = UTC 4/10/16/22）
+  schedule:
+    - cron: '0 4,10,16,22 * * *'
+  # 也可以手动触发
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-scores:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 设置Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 运行比分更新脚本
+        run: python scripts/update_scores.py
+
+      - name: 检查是否有变更
+        id: check
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "✅ 有新的比分数据"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "ℹ️  无需更新"
+          fi
+
+      - name: 提交并推送更新
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.name "World Cup Bot"
+          git config user.email "bot@cscaicai.github.io"
+          git add index.html
+          git commit -m "⚽ 自动更新比分 - $(date '+%Y-%m-%d %H:%M UTC')"
+          git push
