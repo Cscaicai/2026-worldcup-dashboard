@@ -38,3 +38,4 @@ https://cscaicai.github.io/2026-worldcup-dashboard/
 ## 📊 数据来源
 
 比分数据来自 [ESPN Sports API](https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard)（免费公开接口）。
+
