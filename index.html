@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 FIFA World Cup™ 信息面板</title>
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-dark:#0a0e1a;
+  --bg-card:rgba(255,255,255,0.04);
+  --bg-card-hover:rgba(255,255,255,0.08);
+  --border-glass:rgba(255,255,255,0.08);
+  --text-primary:#f0f2f8;
+  --text-secondary:rgba(240,242,248,0.6);
+  --text-muted:rgba(240,242,248,0.35);
+  --accent-blue:#3b82f6;
+  --accent-blue-glow:rgba(59,130,246,0.3);
+  --accent-gold:#f59e0b;
+  --accent-gold-glow:rgba(245,158,11,0.3);
+  --accent-green:#22c55e;
+  --accent-red:#ef4444;
+  --accent-purple:#8b5cf6;
+  --group-a:#3b82f6; --group-b:#6366f1; --group-c:#06b6d4;
+  --group-d:#8b5cf6; --group-e:#ec4899; --group-f:#f59e0b;
+  --group-g:#14b8a6; --group-h:#e11d48; --group-i:#a855f7;
+  --group-j:#0ea5e9; --group-k:#f97316; --group-l:#84cc16;
+}
+html{font-size:15px;scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,sans-serif;
+  background:var(--bg-dark);
+  color:var(--text-primary);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;
+  background:radial-gradient(ellipse at 20% 50%,rgba(59,130,246,0.03) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 20%,rgba(245,158,11,0.02) 0%,transparent 50%);
+  pointer-events:none;z-index:0;
+}
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.25)}
+
+/* ===== LAYOUT ===== */
+.wrapper{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:0 20px 60px}
+
+/* ===== HEADER ===== */
+.header{
+  text-align:center;padding:40px 20px 30px;
+  background:linear-gradient(180deg,rgba(59,130,246,0.08) 0%,transparent 100%);
+  border-bottom:1px solid var(--border-glass);
+  margin:0 -20px 30px;
+}
+.header-badge{
+  display:inline-block;padding:4px 16px;border-radius:20px;
+  background:rgba(245,158,11,0.15);color:var(--accent-gold);
+  font-size:0.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:12px;border:1px solid rgba(245,158,11,0.2);
+}
+.header h1{font-size:2.5rem;font-weight:800;letter-spacing:-0.5px}
+.header h1 span{background:linear-gradient(135deg,#3b82f6,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header p{color:var(--text-secondary);margin-top:8px;font-size:1rem}
+
+/* ===== STATS BAR ===== */
+.stats-bar{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;
+  margin-bottom:30px;
+}
+.stat-card{
+  background:var(--bg-card);border:1px solid var(--border-glass);
+  border-radius:12px;padding:16px;text-align:center;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:all .3s;
+}
+.stat-card:hover{background:var(--bg-card-hover);transform:translateY(-2px)}
+.stat-card .num{font-size:1.8rem;font-weight:800}
+.stat-card .label{font-size:0.78rem;color:var(--text-secondary);margin-top:4px;letter-spacing:0.5px}
+.stat-card .num.blue{color:var(--accent-blue)}
+.stat-card .num.gold{color:var(--accent-gold)}
+.stat-card .num.green{color:var(--accent-green)}
+.stat-card .num.red{color:var(--accent-red)}
+
+/* ===== COUNTDOWN BANNER ===== */
+.countdown-banner{
+  background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(245,158,11,0.1));
+  border:1px solid var(--border-glass);border-radius:14px;
+  padding:20px 24px;margin-bottom:30px;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  backdrop-filter:blur(12px);
+}
+.countdown-item{text-align:center;padding:0 12px}
+.countdown-item .num{font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,#3b82f6,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.countdown-item .label{font-size:0.7rem;color:var(--text-secondary);letter-spacing:0.5px}
+.countdown-sep{color:var(--text-muted);font-size:1.4rem;font-weight:200}
+
+/* ===== GROUP STANDINGS ===== */
+.section-title{
+  font-size:1.3rem;font-weight:700;margin-bottom:16px;padding-left:14px;
+  border-left:3px solid var(--accent-blue);
+}
+.group-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;
+  margin-bottom:40px;
+}
+.group-card{
+  background:var(--bg-card);border:1px solid var(--border-glass);
+  border-radius:14px;padding:18px;backdrop-filter:blur(12px);
+  transition:all .3s;
+}
+.group-card:hover{background:var(--bg-card-hover);transform:translateY(-2px)}
+.group-card-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-bottom:10px;border-bottom:1px solid var(--border-glass);margin-bottom:10px;
+}
+.group-card-header .name{font-weight:700;font-size:1rem}
+.group-card-header .badge{
+  font-size:0.65rem;padding:2px 10px;border-radius:10px;
+  background:rgba(255,255,255,0.06);color:var(--text-secondary);
+}
+.group-team{
+  display:grid;grid-template-columns:2fr 0.7fr 0.7fr 0.7fr 0.7fr 0.7fr;
+  padding:6px 4px;font-size:0.82rem;align-items:center;gap:4px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.group-team:last-child{border-bottom:none}
+.group-team .flag{font-size:1.1rem;margin-right:6px}
+.group-team .team-name{font-weight:500}
+.group-team .pts{font-weight:700;text-align:center}
+.group-team .pts.highlight{color:var(--accent-green)}
+.group-team .gp,.group-team .gd{text-align:center;color:var(--text-secondary)}
+
+/* ===== DATE GROUP ===== */
+.match-date-group{margin-bottom:16px}
+.date-header{
+  display:flex;align-items:center;gap:12px;margin-bottom:10px;
+  padding:8px 14px;background:rgba(139,92,246,0.18);border-radius:10px;
+  border-left:3px solid var(--accent-purple);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.date-header .date-text{font-weight:600;font-size:1rem}
+.date-header .match-count{font-size:0.8rem;color:var(--text-secondary);background:rgba(255,255,255,0.08);padding:3px 12px;border-radius:8px}
+
+/* ===== MATCH CARD ===== */
+.match-card{
+  display:grid;grid-template-columns:120px 1fr 120px;
+  gap:8px;align-items:center;
+  background:var(--bg-card);border:1px solid var(--border-glass);
+  border-radius:12px;padding:10px 14px;margin-bottom:6px;
+  backdrop-filter:blur(8px);transition:all .3s;cursor:default;
+}
+.match-card:hover{background:var(--bg-card-hover);transform:translateX(4px)}
+.match-card.done{
+  border-left:3px solid var(--accent-green);
+  background:rgba(34,197,94,0.12);
+}
+.match-card.upcoming{
+  border-left:3px solid var(--accent-gold);
+  background:rgba(245,158,11,0.12);
+}
+.match-card.live{
+  border-left:3px solid var(--accent-red);
+  background:rgba(239,68,68,0.12);
+  animation:livePulse 2s ease-in-out infinite;
+}
+@keyframes livePulse{
+  0%,100%{border-left-color:var(--accent-red)}
+  50%{border-left-color:transparent}
+}
+.match-card.knockout{border-left-color:var(--accent-gold)}
+.match-card.knockout.done{border-left-color:var(--accent-gold)}
+
+/* Time column */
+.match-time-col{text-align:center}
+.match-time-col .time{font-weight:700;font-size:1.05rem;line-height:1.1}
+.match-time-col .round-badge{
+  display:inline-block;font-size:0.7rem;padding:2px 8px;border-radius:6px;
+  background:rgba(255,255,255,0.08);color:var(--text-secondary);margin-top:3px;
+  letter-spacing:0.5px;
+}
+.match-time-col .venue{
+  font-size:0.7rem;color:var(--text-muted);margin-top:2px;line-height:1.1;
+}
+
+/* Teams column */
+.match-teams{
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;
+}
+.team{display:flex;align-items:center;gap:6px}
+.team.home{justify-content:flex-end}
+.team.away{justify-content:flex-start}
+.team .flag{font-size:1.3rem}
+.flag-img{width:26px;height:18px;vertical-align:middle;border-radius:2px;display:inline-block;object-fit:cover}
+.team .name{font-weight:600;font-size:1.8rem;white-space:nowrap}
+.team .rank{font-size:0.6rem;color:var(--text-muted)}
+
+.match-score{
+  font-size:1.4rem;font-weight:800;text-align:center;
+  min-width:50px;
+}
+.match-score.done-score{color:var(--accent-green)}
+.match-score.live-score{color:var(--accent-red);animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* Prediction column */
+.match-pred-col{
+  text-align:center;padding-left:8px;
+  border-left:1px solid var(--border-glass);
+}
+.match-pred-col .pred-label{font-size:0.75rem;color:var(--text-secondary);letter-spacing:0.5px}
+.match-pred-col .pred-score{font-size:1.15rem;font-weight:700;color:var(--accent-gold);margin:3px 0}
+.match-pred-col .reliability-bar{
+  width:100%;height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;margin-top:5px;
+}
+.match-pred-col .reliability-fill{
+  height:100%;border-radius:3px;transition:width 1s ease;
+}
+.match-pred-col .reliability-text{font-size:0.72rem;color:var(--text-secondary);margin-top:3px}
+
+/* ===== COUNTDOWN IN MATCH ===== */
+.countdown-small{font-size:0.75rem;color:var(--text-secondary);margin-top:3px}
+.countdown-small .cd-val{font-weight:600;color:var(--accent-blue)}
+
+/* ===== STATUS FILTER ===== */
+.filter-bar{
+  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;
+}
+.filter-btn{
+  padding:6px 16px;border-radius:20px;border:1px solid var(--border-glass);
+  background:transparent;color:var(--text-secondary);font-size:0.8rem;
+  cursor:pointer;transition:all .3s;font-family:inherit;
+}
+.filter-btn:hover{background:var(--bg-card-hover);color:var(--text-primary)}
+.filter-btn.active{background:var(--accent-blue);color:#fff;border-color:var(--accent-blue)}
+
+/* ===== TAB NAV FOR ROUNDS ===== */
+.tab-nav{
+  display:flex;gap:2px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;
+}
+.tab-btn{
+  padding:8px 18px;border:none;border-radius:8px 8px 0 0;
+  background:rgba(255,255,255,0.03);color:var(--text-secondary);
+  font-size:0.82rem;cursor:pointer;transition:all .3s;white-space:nowrap;font-family:inherit;
+}
+.tab-btn:hover{background:rgba(255,255,255,0.07);color:var(--text-primary)}
+.tab-btn.active{background:var(--bg-card);color:var(--text-primary);font-weight:600}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:820px){
+  .match-card{grid-template-columns:1fr}
+  .match-time-col{display:flex;gap:12px;align-items:center;justify-content:center;padding-bottom:8px;border-bottom:1px solid var(--border-glass);margin-bottom:8px}
+  .match-pred-col{border-left:none;border-top:1px solid var(--border-glass);padding-top:8px;margin-top:8px;padding-left:0}
+  .group-grid{grid-template-columns:1fr}
+  .header h1{font-size:1.6rem}
+  .stat-card .num{font-size:1.3rem}
+  .countdown-item .num{font-size:1.2rem}
+  .team .name{font-size:0.8rem}
+}
+@media(max-width:480px){
+  .stats-bar{grid-template-columns:repeat(2,1fr)}
+  .countdown-banner{gap:8px;justify-content:center}
+  .group-team{grid-template-columns:2fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;font-size:0.72rem}
+}
+
+/* ===== FOOTER ===== */
+.footer{
+  text-align:center;padding:30px 0;margin-top:40px;
+  border-top:1px solid var(--border-glass);color:var(--text-muted);font-size:0.75rem;
+}
+
+/* ===== TOOLTIP ===== */
+.match-card .group-hint{font-size:0.65rem;color:var(--text-muted);margin-top:2px}
+
+/* Tournament progress bar */
+.tournament-progress{
+  margin-bottom:30px;
+}
+.progress-track{
+  width:100%;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--accent-blue),var(--accent-gold));
+  border-radius:4px;transition:width .5s ease;
+}
+.progress-label{display:flex;justify-content:space-between;margin-top:6px;font-size:0.7rem;color:var(--text-muted)}
+</style>
+</head>
+<body>
+<div class="wrapper" id="app">
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-badge">⚽ 第二十三届世界杯</div>
+  <h1><span>2026 国际足联世界杯</span>™</h1>
+  <p>🇨🇦 加拿大 · 🇲🇽 墨西哥 · 🇺🇸 美国 · 2026年6月11日 – 7月19日</p>
+</header>
+
+<!-- STATS BAR -->
+<div class="stats-bar" id="statsBar"></div>
+
+<!-- TOURNAMENT PROGRESS -->
+<div class="tournament-progress">
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label"><span>小组赛</span><span>淘汰赛</span><span>决赛</span></div>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="countdown-banner" id="countdownBanner">
+  <div class="countdown-item"><div class="num" id="cdDays">--</div><div class="label">天</div></div>
+  <div class="countdown-sep">:</div>
+  <div class="countdown-item"><div class="num" id="cdHours">--</div><div class="label">时</div></div>
+  <div class="countdown-sep">:</div>
+  <div class="countdown-item"><div class="num" id="cdMins">--</div><div class="label">分</div></div>
+  <div class="countdown-sep">:</div>
+  <div class="countdown-item"><div class="num" id="cdSecs">--</div><div class="label">秒</div></div>
+  <div style="flex:1;min-width:120px;text-align:right;font-size:0.8rem;color:var(--text-secondary)" id="cdLabel">决赛倒计时</div>
+</div>
+
+<!-- GROUP STANDINGS -->
+<h2 class="section-title" style="border-left-color:var(--accent-purple)">📊 小组积分榜</h2>
+<div class="group-grid" id="groupGrid"></div>
+
+<!-- TAB NAV -->
+<h2 class="section-title">📅 赛程安排</h2>
+<div class="filter-bar" id="filterBar"></div>
+<div class="tab-nav" id="tabNav"></div>
+<div id="scheduleContent"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  数据截至 2026年6月13日 · 预测由AI生成 · 所有时间为美国东部时间 (ET)<br>
+  🏆 48支球队 · 104场比赛 · 16个场馆 · 3个主办国
+</div>
+
+</div>
+
+<script>
+// ===== DATA =====
+const GROUP_DATA = {
+  'A':[
+    {name:'墨西哥',code:'MEX',flag:'🇲🇽',rank:15,mp:1,w:1,d:0,l:0,gf:2,ga:0,pts:3},
+    {name:'韩国',code:'KOR',flag:'🇰🇷',rank:25,mp:1,w:1,d:0,l:0,gf:2,ga:1,pts:3},
+    {name:'捷克',code:'CZE',flag:'🇨🇿',rank:41,mp:1,w:0,d:0,l:1,gf:1,ga:2,pts:0},
+    {name:'南非',code:'RSA',flag:'🇿🇦',rank:60,mp:1,w:0,d:0,l:1,gf:0,ga:2,pts:0}
+  ],
+  'B':[
+    {name:'加拿大',code:'CAN',flag:'🇨🇦',rank:39,mp:1,w:0,d:1,l:0,gf:1,ga:1,pts:1},
+    {name:'波黑',code:'BIH',flag:'🇧🇦',rank:65,mp:1,w:0,d:1,l:0,gf:1,ga:1,pts:1},
+    {name:'瑞士',code:'SUI',flag:'🇨🇭',rank:19,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'卡塔尔',code:'QAT',flag:'🇶🇦',rank:55,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+  ],
+  'C':[
+    {name:'巴西',code:'BRA',flag:'🇧🇷',rank:6,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'摩洛哥',code:'MAR',flag:'🇲🇦',rank:8,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'苏格兰',code:'SCO',flag:'🏴󠁧󠁢󠁳󠁣󠁴󠁿',rank:43,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'海地',code:'HAI',flag:'🇭🇹',rank:83,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+  ],
+  'D':[
+    {name:'美国',code:'USA',flag:'🇺🇸',rank:16,mp:1,w:1,d:0,l:0,gf:4,ga:1,pts:3},
+    {name:'澳大利亚',code:'AUS',flag:'🇦🇺',rank:20,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'土耳其',code:'TUR',flag:'🇹🇷',rank:22,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'巴拉圭',code:'PAR',flag:'🇵🇾',rank:40,mp:1,w:0,d:0,l:1,gf:1,ga:4,pts:0}
+  ],
+  'E':[
+    {name:'德国',code:'GER',flag:'🇩🇪',rank:10,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'厄瓜多尔',code:'ECU',flag:'🇪🇨',rank:23,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'科特迪瓦',code:'CIV',flag:'🇨🇮',rank:34,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'库拉索',code:'CUW',flag:'🇨🇼',rank:82,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+  ],
+  'F':[
+    {name:'荷兰',code:'NED',flag:'🇳🇱',rank:7,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'日本',code:'JPN',flag:'🇯🇵',rank:18,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'瑞典',code:'SWE',flag:'🇸🇪',rank:38,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'突尼斯',code:'TUN',flag:'🇹🇳',rank:44,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+  ],
+  'G':[
+    {name:'比利时',code:'BEL',flag:'🇧🇪',rank:9,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'埃及',code:'EGY',flag:'🇪🇬',rank:29,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'伊朗',code:'IRN',flag:'🇮🇷',rank:21,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'新西兰',code:'NZL',flag:'🇳🇿',rank:89,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+  ],
+  'H':[
+    {name:'西班牙',code:'ESP',flag:'🇪🇸',rank:2,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'乌拉圭',code:'URU',flag:'🇺🇾',rank:17,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'沙特',code:'KSA',flag:'🇸🇦',rank:61,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'佛得角',code:'CPV',flag:'🇨🇻',rank:69,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+  ],
+  'I':[
+    {name:'法国',code:'FRA',flag:'🇫🇷',rank:1,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'塞内加尔',code:'SEN',flag:'🇸🇳',rank:14,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'伊拉克',code:'IRQ',flag:'🇮🇶',rank:57,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'挪威',code:'NOR',flag:'🇳🇴',rank:31,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+  ],
+  'J':[
+    {name:'阿根廷',code:'ARG',flag:'🇦🇷',rank:3,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'阿尔及利亚',code:'ALG',flag:'🇩🇿',rank:28,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'奥地利',code:'AUT',flag:'🇦🇹',rank:24,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'约旦',code:'JOR',flag:'🇯🇴',rank:63,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+  ],
+  'K':[
+    {name:'葡萄牙',code:'POR',flag:'🇵🇹',rank:5,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'哥伦比亚',code:'COL',flag:'🇨🇴',rank:13,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'刚果(金)',code:'COD',flag:'🇨🇩',rank:46,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'乌兹别克',code:'UZB',flag:'🇺🇿',rank:50,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+  ],
+  'L':[
+    {name:'英格兰',code:'ENG',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',rank:4,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'克罗地亚',code:'CRO',flag:'🇭🇷',rank:11,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'加纳',code:'GHA',flag:'🇬🇭',rank:74,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'巴拿马',code:'PAN',flag:'🇵🇦',rank:33,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+  ]
+};
+
+// Predictions engine: {score: [homeGoals, awayGoals], reliability: 0-100}
+function genPred(homeRank, awayRank, stage) {
+  let diff = awayRank - homeRank; // positive = home stronger
+  let baseRel = Math.min(95, Math.max(40, 50 + Math.abs(diff) * 1.2));
+  if (stage === 'knockout') baseRel = Math.min(baseRel, 70);
+  // Randomize slightly
+  let r = Math.random();
+  let hg, ag;
+  if (diff > 20) { hg = Math.random() < 0.5 ? 2 : 3; ag = r < 0.6 ? 0 : 1; baseRel += 10; }
+  else if (diff > 10) { hg = r < 0.5 ? 2 : 1; ag = r < 0.6 ? 0 : 1; baseRel += 5; }
+  else if (diff > 0) { hg = r < 0.4 ? 2 : 1; ag = r < 0.5 ? 0 : 1; }
+  else if (diff > -10) { hg = r < 0.3 ? 2 : 1; ag = r < 0.4 ? 1 : 0; baseRel -= 5; }
+  else { hg = r < 0.3 ? 1 : 0; ag = r < 0.5 ? 2 : 1; baseRel -= 10; }
+  if (Math.random() < 0.15) { hg = 1; ag = 1; } // draw possibility
+  baseRel = Math.round(Math.min(95, Math.max(35, baseRel + (Math.random()*10-5))));
+  // Add noise
+  let r2 = Math.random();
+  if (r2 < 0.1) { hg = 0; ag = 0; } // 0-0
+  else if (r2 < 0.15) { hg = 3; ag = 2; }
+  return {score:[Math.min(5,Math.max(0,hg)),Math.min(5,Math.max(0,ag))], reliability:baseRel};
+}
+
+// Helper: find team rank by code
+function rankByCode(code) {
+  for (let g in GROUP_DATA) {
+    for (let t of GROUP_DATA[g]) { if (t.code === code) return t.rank; }
+  }
+  return 50;
+}
+
+// ===== MATCHES DATA =====
+// Format: [dateStr, timeET, teams: [homeCode, awayCode], venue, city, round, [homeScore, awayScore] or null]
+const RAW_MATCHES = [
+  // === GROUP STAGE ===
+  // June 11
+  ['2026-06-11','16:00',['MEX','RSA'],'Estadio Banorte','墨西哥城','Grp A',[2,0]],
+  ['2026-06-11','23:00',['KOR','CZE'],'Estadio Akron','瓜达拉哈拉','Grp A',[2,1]],
+  // June 12
+  ['2026-06-12','16:00',['CAN','BIH'],'BMO Field','多伦多','Grp B',[1,1]],
+  ['2026-06-12','22:00',['USA','PAR'],'SoFi Stadium','洛杉矶','Grp D',[4,1]],
+  // June 13
+  ['2026-06-13','16:00',['QAT','SUI'],"Levi's Stadium",'旧金山','Grp B',null],
+  ['2026-06-13','19:00',['BRA','MAR'],'MetLife Stadium','纽约','Grp C',null],
+  ['2026-06-13','20:00',['CIV','ECU'],'Lincoln Financial Field','费城','Grp E',null],
+  ['2026-06-13','22:00',['HAI','SCO'],'Gillette Stadium','波士顿','Grp C',null],
+  ['2026-06-13','23:00',['SWE','TUN'],'Estadio BBVA','蒙特雷','Grp F',null],
+  // June 14
+  ['2026-06-14','01:00',['AUS','TUR'],'BC Place','温哥华','Grp D',null],
+  ['2026-06-14','14:00',['GER','CUW'],'NRG Stadium','休斯顿','Grp E',null],
+  ['2026-06-14','17:00',['NED','JPN'],'AT&T Stadium','达拉斯','Grp F',null],
+  // June 15
+  ['2026-06-15','13:00',['ESP','CPV'],'Mercedes-Benz Stadium','亚特兰大','Grp H',null],
+  ['2026-06-15','16:00',['BEL','EGY'],'Lumen Field','西雅图','Grp G',null],
+  ['2026-06-15','19:00',['KSA','URU'],'Hard Rock Stadium','迈阿密','Grp H',null],
+  ['2026-06-15','22:00',['IRN','NZL'],'SoFi Stadium','洛杉矶','Grp G',null],
+  ['2026-06-15','22:00',['ARG','ALG'],'Arrowhead Stadium','堪萨斯城','Grp J',null],
+  // June 16
+  ['2026-06-16','01:00',['AUT','JOR'],"Levi's Stadium",'旧金山','Grp J',null],
+  ['2026-06-16','14:00',['POR','COD'],'NRG Stadium','休斯顿','Grp K',null],
+  ['2026-06-16','16:00',['FRA','SEN'],'MetLife Stadium','纽约','Grp I',null],
+  ['2026-06-16','17:00',['ENG','CRO'],'AT&T Stadium','达拉斯','Grp L',null],
+  ['2026-06-16','19:00',['IRQ','NOR'],'Gillette Stadium','波士顿','Grp I',null],
+  ['2026-06-16','20:00',['GHA','PAN'],'BMO Field','多伦多','Grp L',null],
+  ['2026-06-16','23:00',['UZB','COL'],'Estadio Banorte','墨西哥城','Grp K',null],
+  // June 18
+  ['2026-06-18','13:00',['CZE','RSA'],'Mercedes-Benz Stadium','亚特兰大','Grp A',null],
+  ['2026-06-18','16:00',['SUI','BIH'],'SoFi Stadium','洛杉矶','Grp B',null],
+  ['2026-06-18','19:00',['CAN','QAT'],'BC Place','温哥华','Grp B',null],
+  ['2026-06-18','22:00',['MEX','KOR'],'Estadio Akron','瓜达拉哈拉','Grp A',null],
+  // June 19
+  ['2026-06-19','16:00',['USA','AUS'],'Lumen Field','西雅图','Grp D',null],
+  ['2026-06-19','19:00',['SCO','MAR'],'Gillette Stadium','波士顿','Grp C',null],
+  ['2026-06-19','21:00',['ECU','CUW'],'Arrowhead Stadium','堪萨斯城','Grp E',null],
+  ['2026-06-19','22:00',['BRA','HAI'],'Lincoln Financial Field','费城','Grp C',null],
+  ['2026-06-19','22:00',['TUR','PAR'],"Levi's Stadium",'旧金山','Grp D',null],
+  // June 20
+  ['2026-06-20','14:00',['NED','SWE'],'NRG Stadium','休斯顿','Grp F',null],
+  ['2026-06-20','17:00',['GER','CIV'],'BMO Field','多伦多','Grp E',null],
+  ['2026-06-20','22:00',['TUN','JPN'],'Estadio BBVA','蒙特雷','Grp F',null],
+  ['2026-06-20','22:00',['NZL','EGY'],'BC Place','温哥华','Grp G',null],
+  // June 21
+  ['2026-06-21','13:00',['ESP','KSA'],'Mercedes-Benz Stadium','亚特兰大','Grp H',null],
+  ['2026-06-21','16:00',['BEL','IRN'],'SoFi Stadium','洛杉矶','Grp G',null],
+  ['2026-06-21','19:00',['URU','CPV'],'Hard Rock Stadium','迈阿密','Grp H',null],
+  // June 22
+  ['2026-06-22','14:00',['ARG','AUT'],'AT&T Stadium','达拉斯','Grp J',null],
+  ['2026-06-22','18:00',['FRA','IRQ'],'Lincoln Financial Field','费城','Grp I',null],
+  ['2026-06-22','20:00',['PAN','CRO'],'BMO Field','多伦多','Grp L',null],
+  ['2026-06-22','21:00',['NOR','SEN'],'MetLife Stadium','纽约','Grp I',null],
+  ['2026-06-22','23:00',['COL','COD'],'Estadio Akron','瓜达拉哈拉','Grp K',null],
+  // June 23
+  ['2026-06-23','14:00',['POR','UZB'],'NRG Stadium','休斯顿','Grp K',null],
+  ['2026-06-23','17:00',['ENG','GHA'],'Gillette Stadium','波士顿','Grp L',null],
+  ['2026-06-23','20:00',['JOR','ALG'],"Levi's Stadium",'旧金山','Grp J',null],
+  // June 24
+  ['2026-06-24','16:00',['SUI','CAN'],'BC Place','温哥华','Grp B',null],
+  ['2026-06-24','16:00',['BIH','QAT'],'Lumen Field','西雅图','Grp B',null],
+  ['2026-06-24','19:00',['SCO','BRA'],'Hard Rock Stadium','迈阿密','Grp C',null],
+  ['2026-06-24','19:00',['MAR','HAI'],'Mercedes-Benz Stadium','亚特兰大','Grp C',null],
+  ['2026-06-24','20:00',['JPN','SWE'],'AT&T Stadium','达拉斯','Grp F',null],
+  ['2026-06-24','20:00',['TUN','NED'],'Arrowhead Stadium','堪萨斯城','Grp F',null],
+  ['2026-06-24','22:00',['CZE','MEX'],'Estadio Banorte','墨西哥城','Grp A',null],
+  ['2026-06-24','22:00',['RSA','KOR'],'Estadio BBVA','蒙特雷','Grp A',null],
+  ['2026-06-24','23:00',['TUR','USA'],'SoFi Stadium','洛杉矶','Grp D',null],
+  ['2026-06-24','23:00',['PAR','AUS'],"Levi's Stadium",'旧金山','Grp D',null],
+  // June 25
+  ['2026-06-25','17:00',['ECU','GER'],'MetLife Stadium','纽约','Grp E',null],
+  ['2026-06-25','17:00',['CUW','CIV'],'Lincoln Financial Field','费城','Grp E',null],
+  ['2026-06-25','21:00',['CPV','KSA'],'NRG Stadium','休斯顿','Grp H',null],
+  ['2026-06-25','21:00',['URU','ESP'],'Estadio Akron','瓜达拉哈拉','Grp H',null],
+  // June 26
+  ['2026-06-26','00:00',['EGY','IRN'],'Lumen Field','西雅图','Grp G',null],
+  ['2026-06-26','00:00',['NZL','BEL'],'BC Place','温哥华','Grp G',null],
+  ['2026-06-26','16:00',['NOR','FRA'],'Gillette Stadium','波士顿','Grp I',null],
+  ['2026-06-26','16:00',['SEN','IRQ'],'BMO Field','多伦多','Grp I',null],
+  ['2026-06-26','20:30',['COL','POR'],'Hard Rock Stadium','迈阿密','Grp K',null],
+  ['2026-06-26','20:30',['COD','UZB'],'Mercedes-Benz Stadium','亚特兰大','Grp K',null],
+  ['2026-06-26','23:00',['ALG','AUT'],'Arrowhead Stadium','堪萨斯城','Grp J',null],
+  ['2026-06-26','23:00',['JOR','ARG'],'AT&T Stadium','达拉斯','Grp J',null],
+  // June 27
+  ['2026-06-27','18:00',['PAN','ENG'],'MetLife Stadium','纽约','Grp L',null],
+  ['2026-06-27','18:00',['CRO','GHA'],'Lincoln Financial Field','费城','Grp L',null],
+
+  // === ROUND OF 32 ===
+  ['2026-06-28','15:00',['TBD','TBD'],'SoFi Stadium','洛杉矶','R32',null,'2A vs 2B'],
+  ['2026-06-29','13:00',['TBD','TBD'],'NRG Stadium','休斯顿','R32',null,'1C vs 2F'],
+  ['2026-06-29','16:30',['TBD','TBD'],'Gillette Stadium','波士顿','R32',null,'1E vs 3ACDF'],
+  ['2026-06-29','20:00',['TBD','TBD'],'Estadio BBVA','蒙特雷','R32',null,'1F vs 2C'],
+  ['2026-06-29','21:00',['TBD','TBD'],'Estadio Banorte','墨西哥城','R32',null,'1A vs 3CEFHI'],
+  ['2026-06-30','13:00',['TBD','TBD'],'AT&T Stadium','达拉斯','R32',null,'2E vs 2I'],
+  ['2026-06-30','17:00',['TBD','TBD'],'MetLife Stadium','纽约','R32',null,'1I vs 3CDFGH'],
+  ['2026-06-30','20:00',['TBD','TBD'],"Levi's Stadium",'旧金山','R32',null,'1D vs 3BEFIJ'],
+  ['2026-07-01','12:00',['TBD','TBD'],'Mercedes-Benz Stadium','亚特兰大','R32',null,'1L vs 3EHIJK'],
+  ['2026-07-01','16:00',['TBD','TBD'],'Lumen Field','西雅图','R32',null,'1G vs 3AEHIJ'],
+  ['2026-07-02','15:00',['TBD','TBD'],'SoFi Stadium','洛杉矶','R32',null,'1H vs 2J'],
+  ['2026-07-02','19:00',['TBD','TBD'],'BMO Field','多伦多','R32',null,'2K vs 2L'],
+  ['2026-07-02','23:00',['TBD','TBD'],'BC Place','温哥华','R32',null,'1B vs 3EFGIJ'],
+  ['2026-07-03','14:00',['TBD','TBD'],'AT&T Stadium','达拉斯','R32',null,'2D vs 2G'],
+  ['2026-07-03','18:00',['TBD','TBD'],'Hard Rock Stadium','迈阿密','R32',null,'1J vs 2H'],
+  ['2026-07-03','21:30',['TBD','TBD'],'Arrowhead Stadium','堪萨斯城','R32',null,'1K vs 3DEIJL'],
+
+  // === ROUND OF 16 ===
+  ['2026-07-05','15:00',['TBD','TBD'],'NRG Stadium','休斯顿','R16',null,'W73 vs W76'],
+  ['2026-07-05','19:00',['TBD','TBD'],'SoFi Stadium','洛杉矶','R16',null,'W74 vs W78'],
+  ['2026-07-05','21:00',['TBD','TBD'],'MetLife Stadium','纽约','R16',null,'W75 vs W77'],
+  ['2026-07-06','18:00',['TBD','TBD'],'Lincoln Financial Field','费城','R16',null,'W79 vs W81'],
+  ['2026-07-06','21:00',['TBD','TBD'],'Lumen Field','西雅图','R16',null,'W80 vs W82'],
+  ['2026-07-07','17:00',['TBD','TBD'],'AT&T Stadium','达拉斯','R16',null,'W83 vs W84'],
+  ['2026-07-07','21:00',['TBD','TBD'],'Mercedes-Benz Stadium','亚特兰大','R16',null,'W85 vs W88'],
+  ['2026-07-09','21:00',['TBD','TBD'],'Gillette Stadium','波士顿','R16',null,'W86 vs W87'],
+
+  // === QUARTER-FINALS ===
+  ['2026-07-10','18:00',['TBD','TBD'],'Gillette Stadium','波士顿','QF',null,'W89 vs W90'],
+  ['2026-07-10','19:00',['TBD','TBD'],'SoFi Stadium','洛杉矶','QF',null,'W91 vs W92'],
+  ['2026-07-11','16:00',['TBD','TBD'],'Hard Rock Stadium','迈阿密','QF',null,'W93 vs W94'],
+  ['2026-07-11','21:00',['TBD','TBD'],'Arrowhead Stadium','堪萨斯城','QF',null,'W95 vs W96'],
+
+  // === SEMI-FINALS ===
+  ['2026-07-14','20:00',['TBD','TBD'],'AT&T Stadium','达拉斯','SF',null,'W97 vs W98'],
+  ['2026-07-15','20:00',['TBD','TBD'],'Mercedes-Benz Stadium','亚特兰大','SF',null,'W99 vs W100'],
+
+  // === THIRD PLACE ===
+  ['2026-07-18','16:00',['TBD','TBD'],'Hard Rock Stadium','迈阿密','3rd',null,'L101 vs L102'],
+
+  // === FINAL ===
+  ['2026-07-19','16:00',['TBD','TBD'],'MetLife Stadium','纽约','Final',null,'W101 vs W102'],
+];
+
+// ===== BUILD MATCHES =====
+const matches = RAW_MATCHES.map(r => {
+  let m = {
+    date: r[0], time: r[1], teams: r[2], venue: r[3], city: r[4],
+    round: r[5], result: r[6]||null, placeholder: r[7]||null
+  };
+  let d = new Date(m.date + 'T' + (m.time[0]==='0'&&m.time[1]==='0'?'00':m.time) + ':00-04:00'); // ET = UTC-4
+  m.timestamp = d.getTime();
+  m.isKnockout = !m.round.startsWith('Grp');
+  // Score prediction
+  if (m.result) {
+    m.pred = {score:m.result, reliability:100};
+  } else if (m.teams[0] === 'TBD') {
+    m.pred = {score:[0,0], reliability:0};
+  } else {
+    let hRank = rankByCode(m.teams[0]);
+    let aRank = rankByCode(m.teams[1]);
+    m.pred = genPred(hRank, aRank, m.isKnockout ? 'knockout':'group');
+  }
+  return m;
+});
+
+// ===== RENDER FUNCTIONS =====
+// Flags - use emoji everywhere (works on all browsers, no CDN dependency)
+const FLAG_EMOJI = {
+  'MEX':'🇲🇽','KOR':'🇰🇷','CZE':'🇨🇿','RSA':'🇿🇦',
+  'CAN':'🇨🇦','BIH':'🇧🇦','SUI':'🇨🇭','QAT':'🇶🇦',
+  'BRA':'🇧🇷','MAR':'🇲🇦','HAI':'🇭🇹','SCO':'🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+  'USA':'🇺🇸','PAR':'🇵🇾','AUS':'🇦🇺','TUR':'🇹🇷',
+  'GER':'🇩🇪','ECU':'🇪🇨','CIV':'🇨🇮','CUW':'🇨🇼',
+  'NED':'🇳🇱','JPN':'🇯🇵','SWE':'🇸🇪','TUN':'🇹🇳',
+  'BEL':'🇧🇪','EGY':'🇪🇬','IRN':'🇮🇷','NZL':'🇳🇿',
+  'ESP':'🇪🇸','URU':'🇺🇾','KSA':'🇸🇦','CPV':'🇨🇻',
+  'FRA':'🇫🇷','SEN':'🇸🇳','IRQ':'🇮🇶','NOR':'🇳🇴',
+  'ARG':'🇦🇷','ALG':'🇩🇿','AUT':'🇦🇹','JOR':'🇯🇴',
+  'POR':'🇵🇹','COL':'🇨🇴','COD':'🇨🇩','UZB':'🇺🇿',
+  'CRO':'🇭🇷','GHA':'🇬🇭','PAN':'🇵🇦','ENG':'🏴󠁧󠁢󠁥󠁮󠁧󠁿'
+};
+function flagEmoji(code) { return FLAG_EMOJI[code] || '🏳️'; }
+
+function teamInfo(code) {
+  for (let g in GROUP_DATA) {
+    for (let t of GROUP_DATA[g]) { if (t.code === code) return t; }
+  }
+  return {name:code, code, flag:'🏳️', rank:99};
+}
+
+function renderStats() {
+  let total = matches.length;
+  let done = matches.filter(m => m.result).length;
+  let upcoming = total - done;
+  let el = document.getElementById('statsBar');
+  el.innerHTML = `
+    <div class="stat-card"><div class="num blue">${total}</div><div class="label">总场次</div></div>
+    <div class="stat-card"><div class="num gold">${done}</div><div class="label">已完成</div></div>
+    <div class="stat-card"><div class="num green">${upcoming}</div><div class="label">待进行</div></div>
+    <div class="stat-card"><div class="num red">${Object.keys(GROUP_DATA).length}</div><div class="label">比赛小组</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--accent-purple)">48</div><div class="label">参赛球队</div></div>
+  `;
+  // Progress
+  let pct = Math.round((done/total)*100);
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function renderGroups() {
+  let el = document.getElementById('groupGrid');
+  let html = '';
+  for (let g in GROUP_DATA) {
+    let teams = GROUP_DATA[g].sort((a,b) => b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga));
+    html += `<div class="group-card">
+      <div class="group-card-header">
+        <span class="name">第${g}组</span>
+        <span class="badge">${teams.length}支球队</span>
+      </div>
+      <div class="group-team" style="color:var(--text-muted);font-size:0.68rem;letter-spacing:0.5px">
+        <span>球队</span><span class="pts">积分</span><span class="gp">场次</span><span class="gd">净胜</span><span>进球</span><span>失球</span>
+      </div>`;
+    for (let t of teams) {
+      let gd = t.gf - t.ga;
+      let gdStr = (gd>0?'+':'')+gd;
+      html += `<div class="group-team">
+        <span><span style="font-size:1.3rem;margin-right:6px">${flagEmoji(t.code)}</span><span class="team-name">${t.name}</span></span>
+        <span class="pts ${t.pts>0?'highlight':''}">${t.pts}</span>
+        <span class="gp">${t.mp}</span>
+        <span class="gd" style="color:${gd>0?'var(--accent-green)':gd<0?'var(--accent-red)':'var(--text-secondary)'}">${gdStr}</span>
+        <span style="text-align:center">${t.gf}</span>
+        <span style="text-align:center">${t.ga}</span>
+      </div>`;
+    }
+    html += `</div>`;
+  }
+  el.innerHTML = html;
+}
+
+// Round label translation
+const ROUND_LABELS = {
+  'Grp A':'A组','Grp B':'B组','Grp C':'C组','Grp D':'D组','Grp E':'E组','Grp F':'F组',
+  'Grp G':'G组','Grp H':'H组','Grp I':'I组','Grp J':'J组','Grp K':'K组','Grp L':'L组',
+  'R32':'32强','R16':'16强','QF':'1/4决赛','SF':'半决赛','3rd':'三四名决赛','Final':'决赛'
+};
+
+function renderMatch(m) {
+  let isTBD = m.teams[0] === 'TBD';
+  let home = !isTBD ? teamInfo(m.teams[0]) : {name:m.placeholder?.split(' vs ')[0]||'待定',flag:'❓',rank:99};
+  let away = !isTBD ? teamInfo(m.teams[1]) : {name:m.placeholder?.split(' vs ')[1]||'待定',flag:'❓',rank:99};
+  let now = Date.now();
+  let isDone = !!m.result;
+  let isLive = !isDone && (m.timestamp <= now) && (m.timestamp + 7200000 > now);
+  let cls = 'match-card' + (isDone?' done':'') + (isLive?' live':'') + (!isDone && !isLive?' upcoming':'') + (m.isKnockout?' knockout':'');
+
+  let timeStr = m.time;
+  let dateObj = new Date(m.date);
+  let month = dateObj.toLocaleString('zh-CN',{month:'numeric'})+'月';
+  let day = dateObj.getDate();
+
+  // Home flag
+  let homeFlagHtml = '<span style="font-size:32px;line-height:1">❓</span>';
+  if (!isTBD) {
+    homeFlagHtml = `<span style="font-size:32px;line-height:1">${flagEmoji(m.teams[0])}</span>`;
+  }
+  let awayFlagHtml = '<span style="font-size:32px;line-height:1">❓</span>';
+  if (!isTBD) {
+    awayFlagHtml = `<span style="font-size:32px;line-height:1">${flagEmoji(m.teams[1])}</span>`;
+  }
+
+  // Countdown
+  let cdHtml = '';
+  if (!isDone) {
+    let diff = m.timestamp - now;
+    if (diff > 0) {
+      let dd = Math.floor(diff/86400000);
+      let hh = Math.floor((diff%86400000)/3600000);
+      let mm = Math.floor((diff%3600000)/60000);
+      cdHtml = `<div class="countdown-small">${dd>0?dd+'天 ':''}${hh}时 ${mm}分</div>`;
+    } else if (isLive) {
+      cdHtml = `<div class="countdown-small" style="color:var(--accent-red)">🔴 直播中</div>`;
+    } else {
+      cdHtml = `<div class="countdown-small" style="color:var(--text-muted)">--</div>`;
+    }
+  }
+
+  let scoreHtml;
+  if (isDone) {
+    scoreHtml = `<div class="match-score done-score">${m.result[0]}-${m.result[1]}</div>`;
+  } else if (isLive) {
+    scoreHtml = `<div class="match-score live-score">${m.pred.score[0]}-${m.pred.score[1]}</div>`;
+  } else {
+    scoreHtml = `<div class="match-score" style="color:var(--text-muted)">VS</div>`;
+  }
+
+  let predHtml = '';
+  if (m.teams[0] === 'TBD') {
+    predHtml = `<div class="match-pred-col"><div class="pred-label">小组赛后确定</div></div>`;
+  } else {
+    let relColor = m.pred.reliability > 75 ? 'var(--accent-green)' :
+                   m.pred.reliability > 55 ? 'var(--accent-gold)' : 'var(--accent-red)';
+    if (isDone) {
+      predHtml = `
+        <div class="match-pred-col">
+          <div class="pred-label">预测比分</div>
+          <div class="pred-score">${m.pred.score[0]} - ${m.pred.score[1]}</div>
+          <div class="reliability-bar"><div class="reliability-fill" style="width:${m.pred.reliability}%;background:${relColor}"></div></div>
+          <div class="reliability-text">可靠度 ${m.pred.reliability}% · 实际 ${m.result[0]}-${m.result[1]}</div>
+        </div>`;
+    } else {
+      predHtml = `
+        <div class="match-pred-col">
+          <div class="pred-label">预测比分</div>
+          <div class="pred-score">${m.pred.score[0]} - ${m.pred.score[1]}</div>
+          <div class="reliability-bar"><div class="reliability-fill" style="width:${m.pred.reliability}%;background:${relColor}"></div></div>
+          <div class="reliability-text">可靠度 ${m.pred.reliability}%</div>
+        </div>`;
+    }
+  }
+
+  let roundLabel = ROUND_LABELS[m.round] || m.round;
+  let venueShort = m.venue
+    .replace(/ Stadium$/,'体育场').replace(/ Field$/,'球场')
+    .replace(/Estadio /,'').replace(/Estádio /,'')
+    .replace(/BMO Field/,'BMO球场').replace(/BC Place/,'BC Place');
+
+  return `<div class="${cls}">
+    <div class="match-time-col">
+      <div class="time">${month} ${day} · ${timeStr}</div>
+      <div class="round-badge">${roundLabel}</div>
+      <div class="venue">${venueShort}</div>
+      <div class="venue" style="font-size:0.62rem">${m.city}</div>
+      ${cdHtml}
+    </div>
+    <div class="match-teams">
+      <div class="team home">
+        <span class="name">${home.name}</span>
+        ${homeFlagHtml}
+      </div>
+      ${scoreHtml}
+      <div class="team away">
+        ${awayFlagHtml}
+        <span class="name">${away.name}</span>
+      </div>
+    </div>
+    ${predHtml}
+  </div>`;
+}
+
+function renderSchedule(filterGroup, tab) {
+  let el = document.getElementById('scheduleContent');
+  let filtered = [...matches];
+
+  // Filter by group/round
+  if (filterGroup !== 'all') {
+    if (filterGroup === 'knockout') {
+      filtered = filtered.filter(m => m.isKnockout);
+    } else if (filterGroup === 'group') {
+      filtered = filtered.filter(m => !m.isKnockout);
+    } else {
+      filtered = filtered.filter(m => m.round === filterGroup);
+    }
+  }
+
+  // Tab: all / done / upcoming
+  if (tab === 'done') filtered = filtered.filter(m => m.result);
+  else if (tab === 'upcoming') filtered = filtered.filter(m => !m.result);
+
+  // Group by date
+  let byDate = {};
+  filtered.forEach(m => {
+    if (!byDate[m.date]) byDate[m.date] = [];
+    byDate[m.date].push(m);
+  });
+
+  let html = '';
+  let sortedDates = Object.keys(byDate).sort();
+  sortedDates.forEach(d => {
+    let dateObj = new Date(d);
+    let dateLabel = dateObj.toLocaleDateString('zh-CN', {weekday:'long', month:'long', day:'numeric'});
+    let ms = byDate[d];
+    html += `<div class="match-date-group">
+      <div class="date-header">
+        <span class="date-text">${dateLabel}</span>
+        <span class="match-count">${ms.length} 场</span>
+      </div>`;
+    ms.sort((a,b) => a.timestamp - b.timestamp).forEach(m => { html += renderMatch(m); });
+    html += `</div>`;
+  });
+
+  if (!html) html = '<div style="text-align:center;padding:60px 0;color:var(--text-muted)">没有找到匹配的赛程。</div>';
+  el.innerHTML = html;
+
+  // Update countdowns every 10s
+  setTimeout(() => initCountdowns(), 10000);
+}
+
+// ===== FILTERS & TABS =====
+function initFilters() {
+  // Count matches per round
+  function countMatches(r) {
+    if (r === 'all') return matches.length;
+    if (r === 'knockout') return matches.filter(m => m.isKnockout).length;
+    if (r === 'group') return matches.filter(m => !m.isKnockout).length;
+    return matches.filter(m => m.round === r).length;
+  }
+  let rounds = ['all','group','knockout'];
+  for (let g in GROUP_DATA) rounds.push(g);
+  let bar = document.getElementById('filterBar');
+  bar.innerHTML = rounds.map(r => {
+    let count = countMatches(r);
+    let label = r === 'all' ? `全部 ${count}场` : r === 'group' ? `小组赛 ${count}场` : r === 'knockout' ? `淘汰赛 ${count}场` : `第${r}组 ${count}场`;
+    return `<button class="filter-btn ${r==='all'?'active':''}" data-round="${r}" onclick="setFilter('${r}')">${label}</button>`;
+  }).join('');
+
+  let tabs = ['all','done','upcoming'];
+  let tabNav = document.getElementById('tabNav');
+  tabNav.innerHTML = tabs.map(t => {
+    let count = t === 'all' ? matches.length : t === 'done' ? matches.filter(m=>m.result).length : matches.filter(m=>!m.result).length;
+    let label = t === 'all' ? `全部 ${count}场` : t === 'done' ? `✅ 已结束 ${count}场` : `⏳ 未开始 ${count}场`;
+    return `<button class="tab-btn ${t==='all'?'active':''}" data-tab="${t}" onclick="setTab('${t}')">${label}</button>`;
+  }).join('');
+}
+
+let currentFilter = 'all';
+let currentTab = 'all';
+function setFilter(r) {
+  currentFilter = r;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.round === r));
+  renderSchedule(currentFilter, currentTab);
+}
+function setTab(t) {
+  currentTab = t;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
+  renderSchedule(currentFilter, currentTab);
+}
+
+// ===== COUNTDOWN BANNER =====
+function initCountdownBanner() {
+  const finalDate = new Date('2026-07-19T20:00:00Z'); // Final kickoff
+  function tick() {
+    let diff = finalDate - Date.now();
+    if (diff <= 0) {
+      document.getElementById('cdDays').textContent = '🎉';
+      document.getElementById('cdHours').textContent = '--';
+      document.getElementById('cdMins').textContent = '--';
+      document.getElementById('cdSecs').textContent = '--';
+      document.getElementById('cdLabel').textContent = '🏆 赛事进行中！';
+      return;
+    }
+    document.getElementById('cdDays').textContent = Math.floor(diff/86400000);
+    document.getElementById('cdHours').textContent = Math.floor((diff%86400000)/3600000);
+    document.getElementById('cdMins').textContent = Math.floor((diff%3600000)/60000);
+    document.getElementById('cdSecs').textContent = Math.floor((diff%60000)/1000);
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+// ===== INIT =====
+initCountdownBanner();
+renderStats();
+renderGroups();
+initFilters();
+renderSchedule('all','all');
+</script>
+</body>
+</html>
