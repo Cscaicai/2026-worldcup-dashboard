@@ -150,9 +150,11 @@ body::before{display:none}
 /* ===== STAGE NAV (sticky) ===== */
 .stage-nav{
   display:flex;gap:6px;padding:12px 16px;flex-wrap:wrap;
-  background:rgba(10,26,10,0.92);border-bottom:1px solid rgba(200,168,78,0.1);
-  position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);
-  margin-bottom:24px;border-radius:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  background:rgba(10,26,10,0.75);border-bottom:1px solid rgba(200,168,78,0.08);
+  position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);
+  margin-bottom:24px;border-radius:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  box-shadow:0 4px 30px rgba(0,0,0,0.3);
 }
 .stage-nav a{
   color:#8ab88a;text-decoration:none;padding:6px 14px;border-radius:20px;
@@ -812,7 +814,7 @@ function renderMatch(m) {
     if (isDone) {
       predHtml = `
         <div class="match-pred-col">
-          <div class="pred-label">预测比分</div>
+          <div class="pred-label">Hermes Agent 预测比分</div>
           <div class="pred-score">${m.pred.score[0]} - ${m.pred.score[1]}</div>
           <div class="reliability-bar"><div class="reliability-fill" style="width:${m.pred.reliability}%;background:${relColor}"></div></div>
           <div class="reliability-text">可靠度 ${m.pred.reliability}% · 实际 ${m.result[0]}-${m.result[1]}</div>
@@ -820,7 +822,7 @@ function renderMatch(m) {
     } else {
       predHtml = `
         <div class="match-pred-col">
-          <div class="pred-label">预测比分</div>
+          <div class="pred-label">Hermes Agent 预测比分</div>
           <div class="pred-score">${m.pred.score[0]} - ${m.pred.score[1]}</div>
           <div class="reliability-bar"><div class="reliability-fill" style="width:${m.pred.reliability}%;background:${relColor}"></div></div>
           <div class="reliability-text">可靠度 ${m.pred.reliability}%</div>
