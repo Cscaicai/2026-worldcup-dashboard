@@ -937,6 +937,15 @@ function renderMatch(m) {
     ${predHtml}
   </div>`;
 }
+// ===== 计算该场比赛的北京时间日期字符串 =====
+function bjtDateStr(m) {
+  let etHour = parseInt(m.time.split(':')[0]);
+  let bjtHour = (etHour + 12) % 24;
+  let dt = new Date(m.date);
+  if (bjtHour < 12) dt.setDate(dt.getDate() + 1);
+  return dt.toISOString().split('T')[0];
+}
+
 // ===== RENDER SCHEDULE (stage sections) =====
 function renderSchedule(tab) {
   let el = document.getElementById('scheduleContent');
@@ -959,12 +968,13 @@ function renderSchedule(tab) {
     if (stage.id === 'group') {
       let byDate = {};
       filtered.forEach(m => {
-        if (!byDate[m.date]) byDate[m.date] = [];
-        byDate[m.date].push(m);
+        let bjtDate = bjtDateStr(m);
+        if (!byDate[bjtDate]) byDate[bjtDate] = [];
+        byDate[bjtDate].push(m);
       });
       let sortedDates = Object.keys(byDate).sort();
       sortedDates.forEach(d => {
-        let dateObj = new Date(d);
+        let dateObj = new Date(d + 'T12:00:00');
         let dateLabel = dateObj.toLocaleDateString('zh-CN', {weekday:'long', month:'long', day:'numeric'});
         let ms = byDate[d];
         html += `<div class="match-date-group">
