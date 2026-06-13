@@ -488,10 +488,8 @@ function genPred(homeRank, awayRank, stage) {
   if (Math.random() < 0.15) { hg = 1; ag = 1; } // draw possibility
   baseRel = Math.round(Math.min(95, Math.max(35, baseRel + (Math.random()*10-5))));
   // Add noise
-  let r2 = Math.random();
-  if (r2 < 0.1) { hg = 0; ag = 0; } // 0-0
-  else if (r2 < 0.15) { hg = 3; ag = 2; }
-  return {score:[Math.min(5,Math.max(0,hg)),Math.min(5,Math.max(0,ag))], reliability:baseRel};
+  if (hg === 0 && ag === 0 && Math.random() < 0.85) { hg = 1; ag = 0; } // Avoid too many 0-0
+  return {score:[Math.min(6,Math.max(0,hg)),Math.min(6,Math.max(0,ag))], reliability:baseRel};
 }
 
 // Helper: find team rank by code
@@ -802,7 +800,7 @@ function renderMatch(m) {
   } else if (isLive) {
     scoreHtml = `<div class="match-score live-score">${m.pred.score[0]}-${m.pred.score[1]}</div>`;
   } else {
-    scoreHtml = `<div class="match-score" style="color:var(--text-muted)">VS</div>`;
+    scoreHtml = `<div class="match-score" style="color:var(--text-muted)">——</div>`;
   }
 
   let predHtml = '';
