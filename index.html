@@ -147,7 +147,33 @@ body::before{display:none}
 .group-team .pts.highlight{color:var(--accent-green)}
 .group-team .gp,.group-team .gd{text-align:center;color:var(--text-secondary)}
 
-/* ===== DATE GROUP ===== */
+/* ===== STAGE NAV (sticky) ===== */
+.stage-nav{
+  display:flex;gap:6px;padding:12px 16px;flex-wrap:wrap;
+  background:rgba(10,26,10,0.92);border-bottom:1px solid rgba(200,168,78,0.1);
+  position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);
+  margin-bottom:24px;border-radius:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+}
+.stage-nav a{
+  color:#8ab88a;text-decoration:none;padding:6px 14px;border-radius:20px;
+  font-size:0.82rem;font-weight:600;transition:all 0.3s;
+  border:1px solid transparent;white-space:nowrap;cursor:pointer;
+  display:inline-flex;align-items:center;gap:4px;
+}
+.stage-nav a:hover,.stage-nav a.active{
+  background:rgba(200,168,78,0.1);border-color:var(--accent-gold);color:var(--accent-gold-light);
+}
+/* ===== STAGE SECTION ===== */
+.stage-section{margin-bottom:36px}
+.stage-title+.match-date-group{margin-top:8px}
+.stage-title{
+  font-size:1.25rem;font-weight:800;color:var(--accent-gold-light);
+  padding:10px 18px;background:linear-gradient(135deg,rgba(200,168,78,0.08),transparent);
+  border-left:4px solid var(--accent-gold);border-radius:0 8px 8px 0;
+  margin-bottom:16px;display:flex;align-items:center;gap:10px;
+}
+.stage-title .stage-icon{font-size:1.1em}
+.stage-title .match-count{font-size:0.5em;color:#7a9a7a;font-weight:400;margin-left:auto}
 .match-date-group{margin-bottom:16px}
 .date-header{
   display:flex;align-items:center;gap:12px;margin-bottom:10px;
@@ -212,7 +238,7 @@ body::before{display:none}
 .team.home{justify-content:flex-end}
 .team.away{justify-content:flex-start}
 .team .flag{font-size:1.3rem}
-.flag-img{width:26px;height:18px;vertical-align:middle;border-radius:2px;display:inline-block;object-fit:cover}
+.flag-svg{width:38px;height:28px;vertical-align:middle;border-radius:3px;display:inline-block;object-fit:cover;box-shadow:0 1px 3px rgba(0,0,0,0.3)}
 .team .name{font-weight:600;font-size:1.8rem;white-space:nowrap}
 .team .rank{font-size:0.6rem;color:var(--text-muted)}
 
@@ -255,9 +281,9 @@ body::before{display:none}
 .filter-btn:hover{background:var(--bg-card-hover);color:var(--text-primary)}
 .filter-btn.active{background:var(--accent-gold);color:#0a1a0a;border-color:var(--accent-gold)}
 
-/* ===== TAB NAV FOR ROUNDS ===== */
+/* ===== TAB NAV ===== */
 .tab-nav{
-  display:flex;gap:2px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;
+  display:flex;gap:2px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;
 }
 .tab-btn{
   padding:8px 18px;border:none;border-radius:8px 8px 0 0;
@@ -351,9 +377,11 @@ body::before{display:none}
 <h2 class="section-title" style="border-left-color:var(--accent-purple)">📊 小组积分榜</h2>
 <div class="group-grid" id="groupGrid"></div>
 
+<!-- STAGE NAV -->
+<div class="stage-nav" id="stageNav"></div>
+
 <!-- TAB NAV -->
 <h2 class="section-title">📅 赛程安排</h2>
-<div class="filter-bar" id="filterBar"></div>
 <div class="tab-nav" id="tabNav"></div>
 <div id="scheduleContent"></div>
 
@@ -633,22 +661,26 @@ const matches = RAW_MATCHES.map(r => {
 });
 
 // ===== RENDER FUNCTIONS =====
-// Flags - use emoji everywhere (works on all browsers, no CDN dependency)
-const FLAG_EMOJI = {
-  'MEX':'🇲🇽','KOR':'🇰🇷','CZE':'🇨🇿','RSA':'🇿🇦',
-  'CAN':'🇨🇦','BIH':'🇧🇦','SUI':'🇨🇭','QAT':'🇶🇦',
-  'BRA':'🇧🇷','MAR':'🇲🇦','HAI':'🇭🇹','SCO':'🏴󠁧󠁢󠁳󠁣󠁴󠁿',
-  'USA':'🇺🇸','PAR':'🇵🇾','AUS':'🇦🇺','TUR':'🇹🇷',
-  'GER':'🇩🇪','ECU':'🇪🇨','CIV':'🇨🇮','CUW':'🇨🇼',
-  'NED':'🇳🇱','JPN':'🇯🇵','SWE':'🇸🇪','TUN':'🇹🇳',
-  'BEL':'🇧🇪','EGY':'🇪🇬','IRN':'🇮🇷','NZL':'🇳🇿',
-  'ESP':'🇪🇸','URU':'🇺🇾','KSA':'🇸🇦','CPV':'🇨🇻',
-  'FRA':'🇫🇷','SEN':'🇸🇳','IRQ':'🇮🇶','NOR':'🇳🇴',
-  'ARG':'🇦🇷','ALG':'🇩🇿','AUT':'🇦🇹','JOR':'🇯🇴',
-  'POR':'🇵🇹','COL':'🇨🇴','COD':'🇨🇩','UZB':'🇺🇿',
-  'CRO':'🇭🇷','GHA':'🇬🇭','PAN':'🇵🇦','ENG':'🏴󠁧󠁢󠁥󠁮󠁧󠁿'
-};
-function flagEmoji(code) { return FLAG_EMOJI[code] || '🏳️'; }
+// Flags from SVG CDN (crisp at any size)
+const FLAG_CDN = 'https://cdn.jsdelivr.net/gh/lipis/flag-icons@main/flags/4x3/';
+function flagSvg(code) {
+  const map = {
+    'MEX':'mx','KOR':'kr','CZE':'cz','RSA':'za',
+    'CAN':'ca','BIH':'ba','SUI':'ch','QAT':'qa',
+    'BRA':'br','MAR':'ma','HAI':'ht','SCO':'gb-sct',
+    'USA':'us','PAR':'py','AUS':'au','TUR':'tr',
+    'GER':'de','ECU':'ec','CIV':'ci','CUW':'cw',
+    'NED':'nl','JPN':'jp','SWE':'se','TUN':'tn',
+    'BEL':'be','EGY':'eg','IRN':'ir','NZL':'nz',
+    'ESP':'es','URU':'uy','KSA':'sa','CPV':'cv',
+    'FRA':'fr','SEN':'sn','IRQ':'iq','NOR':'no',
+    'ARG':'ar','ALG':'dz','AUT':'at','JOR':'jo',
+    'POR':'pt','COL':'co','COD':'cd','UZB':'uz',
+    'CRO':'hr','GHA':'gh','PAN':'pa','ENG':'gb-eng'
+  };
+  let c = map[code] || code.toLowerCase();
+  return `${FLAG_CDN}${c}.svg`;
+}
 
 function teamInfo(code) {
   for (let g in GROUP_DATA) {
@@ -691,7 +723,7 @@ function renderGroups() {
       let gd = t.gf - t.ga;
       let gdStr = (gd>0?'+':'')+gd;
       html += `<div class="group-team">
-        <span><span style="font-size:1.3rem;margin-right:6px">${flagEmoji(t.code)}</span><span class="team-name">${t.name}</span></span>
+        <span><img class="flag-svg" src="${flagSvg(t.code)}" alt="${t.code}" style="width:24px;height:18px;vertical-align:middle;margin-right:6px"><span class="team-name">${t.name}</span></span>
         <span class="pts ${t.pts>0?'highlight':''}">${t.pts}</span>
         <span class="gp">${t.mp}</span>
         <span class="gd" style="color:${gd>0?'var(--accent-green)':gd<0?'var(--accent-red)':'var(--text-secondary)'}">${gdStr}</span>
@@ -708,8 +740,19 @@ function renderGroups() {
 const ROUND_LABELS = {
   'Grp A':'A组','Grp B':'B组','Grp C':'C组','Grp D':'D组','Grp E':'E组','Grp F':'F组',
   'Grp G':'G组','Grp H':'H组','Grp I':'I组','Grp J':'J组','Grp K':'K组','Grp L':'L组',
-  'R32':'32强','R16':'16强','QF':'1/4决赛','SF':'半决赛','3rd':'三四名决赛','Final':'决赛'
+  'R32':'三十二强','R16':'十六强','QF':'四分之一决赛','SF':'半决赛','3rd':'季军赛','Final':'决赛'
 };
+
+// Stage nav config
+const STAGES = [
+  {id:'group', icon:'🏆', label:'小组赛', roundFilter: m => !m.isKnockout},
+  {id:'r32', icon:'🔱', label:'三十二强', roundFilter: m => m.round === 'R32'},
+  {id:'r16', icon:'⚔️', label:'十六强', roundFilter: m => m.round === 'R16'},
+  {id:'qf', icon:'🔥', label:'四分之一决赛', roundFilter: m => m.round === 'QF'},
+  {id:'sf', icon:'💥', label:'半决赛', roundFilter: m => m.round === 'SF'},
+  {id:'3rd', icon:'🥉', label:'季军赛', roundFilter: m => m.round === '3rd'},
+  {id:'final', icon:'👑', label:'决赛', roundFilter: m => m.round === 'Final'}
+];
 
 function renderMatch(m) {
   let isTBD = m.teams[0] === 'TBD';
@@ -728,11 +771,11 @@ function renderMatch(m) {
   // Home flag
   let homeFlagHtml = '<span style="font-size:32px;line-height:1">❓</span>';
   if (!isTBD) {
-    homeFlagHtml = `<span style="font-size:32px;line-height:1">${flagEmoji(m.teams[0])}</span>`;
+    homeFlagHtml = `<img class="flag-svg" src="${flagSvg(m.teams[0])}" alt="${home.code}">`;
   }
   let awayFlagHtml = '<span style="font-size:32px;line-height:1">❓</span>';
   if (!isTBD) {
-    awayFlagHtml = `<span style="font-size:32px;line-height:1">${flagEmoji(m.teams[1])}</span>`;
+    awayFlagHtml = `<img class="flag-svg" src="${flagSvg(m.teams[1])}" alt="${away.code}">`;
   }
 
   // Countdown
@@ -817,93 +860,113 @@ function renderMatch(m) {
     ${predHtml}
   </div>`;
 }
-
-function renderSchedule(filterGroup, tab) {
+// ===== RENDER SCHEDULE (stage sections) =====
+function renderSchedule(tab) {
   let el = document.getElementById('scheduleContent');
-  let filtered = [...matches];
-
-  // Filter by group/round
-  if (filterGroup !== 'all') {
-    if (filterGroup === 'knockout') {
-      filtered = filtered.filter(m => m.isKnockout);
-    } else if (filterGroup === 'group') {
-      filtered = filtered.filter(m => !m.isKnockout);
-    } else {
-      filtered = filtered.filter(m => m.round === filterGroup);
-    }
-  }
-
-  // Tab: all / done / upcoming
-  if (tab === 'done') filtered = filtered.filter(m => m.result);
-  else if (tab === 'upcoming') filtered = filtered.filter(m => !m.result);
-
-  // Group by date
-  let byDate = {};
-  filtered.forEach(m => {
-    if (!byDate[m.date]) byDate[m.date] = [];
-    byDate[m.date].push(m);
-  });
-
   let html = '';
-  let sortedDates = Object.keys(byDate).sort();
-  sortedDates.forEach(d => {
-    let dateObj = new Date(d);
-    let dateLabel = dateObj.toLocaleDateString('zh-CN', {weekday:'long', month:'long', day:'numeric'});
-    let ms = byDate[d];
-    html += `<div class="match-date-group">
-      <div class="date-header">
-        <span class="date-text">${dateLabel}</span>
-        <span class="match-count">${ms.length} 场</span>
+
+  STAGES.forEach(stage => {
+    let filtered = matches.filter(stage.roundFilter);
+    if (tab === 'done') filtered = filtered.filter(m => m.result);
+    else if (tab === 'upcoming') filtered = filtered.filter(m => !m.result);
+    if (filtered.length === 0) return;
+
+    html += `<div class="stage-section" id="stage-${stage.id}">
+      <div class="stage-title">
+        <span class="stage-icon">${stage.icon}</span>
+        ${stage.label}
+        <span class="match-count">${filtered.length} 场</span>
       </div>`;
-    ms.sort((a,b) => a.timestamp - b.timestamp).forEach(m => { html += renderMatch(m); });
-    html += `</div>`;
+
+    // For group stage, sort by date then time
+    if (stage.id === 'group') {
+      let byDate = {};
+      filtered.forEach(m => {
+        if (!byDate[m.date]) byDate[m.date] = [];
+        byDate[m.date].push(m);
+      });
+      let sortedDates = Object.keys(byDate).sort();
+      sortedDates.forEach(d => {
+        let dateObj = new Date(d);
+        let dateLabel = dateObj.toLocaleDateString('zh-CN', {weekday:'long', month:'long', day:'numeric'});
+        let ms = byDate[d];
+        html += `<div class="match-date-group">
+          <div class="date-header">
+            <span class="date-text">📅 ${dateLabel}</span>
+            <span class="match-count">${ms.length} 场</span>
+          </div>`;
+        ms.sort((a,b) => a.timestamp - b.timestamp).forEach(m => { html += renderMatch(m); });
+        html += '</div>';
+      });
+    } else {
+      // Knockout rounds - simple list
+      filtered.sort((a,b) => a.timestamp - b.timestamp).forEach(m => { html += renderMatch(m); });
+    }
+
+    html += '</div>';
   });
 
   if (!html) html = '<div style="text-align:center;padding:60px 0;color:var(--text-muted)">没有找到匹配的赛程。</div>';
   el.innerHTML = html;
-
-  // Update countdowns every 10s
-  setTimeout(() => initCountdowns(), 10000);
 }
 
-// ===== FILTERS & TABS =====
-function initFilters() {
-  // Count matches per round
-  function countMatches(r) {
-    if (r === 'all') return matches.length;
-    if (r === 'knockout') return matches.filter(m => m.isKnockout).length;
-    if (r === 'group') return matches.filter(m => !m.isKnockout).length;
-    return matches.filter(m => m.round === r).length;
+// ===== STAGE NAV =====
+function initStageNav() {
+  let nav = document.getElementById('stageNav');
+  nav.innerHTML = STAGES.map(s => {
+    let count = matches.filter(s.roundFilter).length;
+    return `<a href="#stage-${s.id}" data-stage="${s.id}">${s.icon} ${s.label} (${count})</a>`;
+  }).join('');
+
+  // IntersectionObserver for active state
+  let sections = document.querySelectorAll('.stage-section');
+  let links = document.querySelectorAll('.stage-nav a');
+  if (sections.length) {
+    let observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          let id = entry.target.id.replace('stage-','');
+          links.forEach(l => l.classList.toggle('active', l.dataset.stage === id));
+        }
+      });
+    }, {threshold: 0.15});
+    // Observer runs after render - use setTimeout
+    setTimeout(() => {
+      document.querySelectorAll('.stage-section').forEach(s => observer.observe(s));
+    }, 100);
   }
-  let rounds = ['all','group','knockout'];
-  for (let g in GROUP_DATA) rounds.push(g);
-  let bar = document.getElementById('filterBar');
-  bar.innerHTML = rounds.map(r => {
-    let count = countMatches(r);
-    let label = r === 'all' ? `全部 ${count}场` : r === 'group' ? `小组赛 ${count}场` : r === 'knockout' ? `淘汰赛 ${count}场` : `第${r}组 ${count}场`;
-    return `<button class="filter-btn ${r==='all'?'active':''}" data-round="${r}" onclick="setFilter('${r}')">${label}</button>`;
-  }).join('');
 
-  let tabs = ['all','done','upcoming'];
-  let tabNav = document.getElementById('tabNav');
-  tabNav.innerHTML = tabs.map(t => {
-    let count = t === 'all' ? matches.length : t === 'done' ? matches.filter(m=>m.result).length : matches.filter(m=>!m.result).length;
-    let label = t === 'all' ? `全部 ${count}场` : t === 'done' ? `✅ 已结束 ${count}场` : `⏳ 未开始 ${count}场`;
-    return `<button class="tab-btn ${t==='all'?'active':''}" data-tab="${t}" onclick="setTab('${t}')">${label}</button>`;
+  // Also update nav when tab changes
+  renderStageNavCounts();
+}
+
+function renderStageNavCounts() {
+  let nav = document.getElementById('stageNav');
+  nav.innerHTML = STAGES.map(s => {
+    let count = matches.filter(s.roundFilter).length;
+    if (currentTab === 'done') count = matches.filter(m => m.result).filter(s.roundFilter).length;
+    else if (currentTab === 'upcoming') count = matches.filter(m => !m.result).filter(s.roundFilter).length;
+    return `<a href="#stage-${s.id}" data-stage="${s.id}">${s.icon} ${s.label} (${count})</a>`;
   }).join('');
 }
 
-let currentFilter = 'all';
+// ===== TAB NAV =====
 let currentTab = 'all';
-function setFilter(r) {
-  currentFilter = r;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.round === r));
-  renderSchedule(currentFilter, currentTab);
+function initTabs() {
+  let tabNav = document.getElementById('tabNav');
+  tabNav.innerHTML = `
+    <button class="tab-btn ${currentTab==='all'?'active':''}" onclick="setTab('all')">📋 全部 ${matches.length}场</button>
+    <button class="tab-btn ${currentTab==='done'?'active':''}" onclick="setTab('done')">✅ 已结束 ${matches.filter(m=>m.result).length}场</button>
+    <button class="tab-btn ${currentTab==='upcoming'?'active':''}" onclick="setTab('upcoming')">⏳ 未开始 ${matches.filter(m=>!m.result).length}场</button>
+  `;
 }
+
 function setTab(t) {
   currentTab = t;
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
-  renderSchedule(currentFilter, currentTab);
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.textContent.includes(t==='all'?'全部':t==='done'?'已结束':'未开始')));
+  renderSchedule(currentTab);
+  // Re-init nav after render
+  setTimeout(initStageNav, 50);
 }
 
 // ===== COUNTDOWN BANNER =====
@@ -932,8 +995,9 @@ function initCountdownBanner() {
 initCountdownBanner();
 renderStats();
 renderGroups();
-initFilters();
-renderSchedule('all','all');
+initTabs();
+renderSchedule('all');
+setTimeout(initStageNav, 200);
 </script>
 </body>
 </html>
