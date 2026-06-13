@@ -389,7 +389,7 @@ body::before{display:none}
 
 <!-- FOOTER -->
 <div class="footer">
-  数据截至 2026年6月13日 · 预测由AI生成 · 所有时间为美国东部时间 (ET)<br>
+  数据截至 2026年6月13日 · 预测由AI生成 · 所有时间为北京时间 (UTC+8)<br>
   🏆 48支球队 · 104场比赛 · 16个场馆 · 3个主办国
 </div>
 
@@ -555,137 +555,137 @@ function rankByCode(code) {
 const RAW_MATCHES = [
   // === GROUP STAGE ===
   // June 11
-  ['2026-06-11','16:00',['MEX','RSA'],'Estadio Banorte','墨西哥城','Grp A',[2,0]],
-  ['2026-06-11','23:00',['KOR','CZE'],'Estadio Akron','瓜达拉哈拉','Grp A',[2,1]],
+  ['2026-06-11','15:00',['MEX','RSA'],'Estadio Banorte','墨西哥城','Grp A',[2,0]],
+  ['2026-06-11','22:00',['KOR','CZE'],'Estadio Akron','瓜达拉哈拉','Grp A',[2,1]],
   // June 12
-  ['2026-06-12','16:00',['CAN','BIH'],'BMO Field','多伦多','Grp B',[1,1]],
-  ['2026-06-12','22:00',['USA','PAR'],'SoFi Stadium','洛杉矶','Grp D',[4,1]],
+  ['2026-06-12','15:00',['CAN','BIH'],'BMO Field','多伦多','Grp B',[1,1]],
+  ['2026-06-12','21:00',['USA','PAR'],'SoFi Stadium','洛杉矶','Grp D',[4,1]],
   // June 13
-  ['2026-06-13','16:00',['QAT','SUI'],"Levi's Stadium",'旧金山','Grp B',null],
-  ['2026-06-13','19:00',['BRA','MAR'],'MetLife Stadium','纽约','Grp C',null],
-  ['2026-06-13','20:00',['CIV','ECU'],'Lincoln Financial Field','费城','Grp E',null],
-  ['2026-06-13','22:00',['HAI','SCO'],'Gillette Stadium','波士顿','Grp C',null],
-  ['2026-06-13','23:00',['SWE','TUN'],'Estadio BBVA','蒙特雷','Grp F',null],
+  ['2026-06-13','15:00',['QAT','SUI'],"Levi's Stadium",'旧金山','Grp B',null],
+  ['2026-06-13','18:00',['BRA','MAR'],'MetLife Stadium','纽约','Grp C',null],
+  ['2026-06-13','19:00',['CIV','ECU'],'Lincoln Financial Field','费城','Grp E',null],
+  ['2026-06-13','21:00',['HAI','SCO'],'Gillette Stadium','波士顿','Grp C',null],
+  ['2026-06-13','22:00',['SWE','TUN'],'Estadio BBVA','蒙特雷','Grp F',null],
   // June 14
-  ['2026-06-14','01:00',['AUS','TUR'],'BC Place','温哥华','Grp D',null],
-  ['2026-06-14','14:00',['GER','CUW'],'NRG Stadium','休斯顿','Grp E',null],
-  ['2026-06-14','17:00',['NED','JPN'],'AT&T Stadium','达拉斯','Grp F',null],
+  ['2026-06-14','00:00',['AUS','TUR'],'BC Place','温哥华','Grp D',null],
+  ['2026-06-14','13:00',['GER','CUW'],'NRG Stadium','休斯顿','Grp E',null],
+  ['2026-06-14','16:00',['NED','JPN'],'AT&T Stadium','达拉斯','Grp F',null],
   // June 15
-  ['2026-06-15','13:00',['ESP','CPV'],'Mercedes-Benz Stadium','亚特兰大','Grp H',null],
-  ['2026-06-15','16:00',['BEL','EGY'],'Lumen Field','西雅图','Grp G',null],
-  ['2026-06-15','19:00',['KSA','URU'],'Hard Rock Stadium','迈阿密','Grp H',null],
-  ['2026-06-15','22:00',['IRN','NZL'],'SoFi Stadium','洛杉矶','Grp G',null],
-  ['2026-06-15','22:00',['ARG','ALG'],'Arrowhead Stadium','堪萨斯城','Grp J',null],
+  ['2026-06-15','12:00',['ESP','CPV'],'Mercedes-Benz Stadium','亚特兰大','Grp H',null],
+  ['2026-06-15','15:00',['BEL','EGY'],'Lumen Field','西雅图','Grp G',null],
+  ['2026-06-15','18:00',['KSA','URU'],'Hard Rock Stadium','迈阿密','Grp H',null],
+  ['2026-06-15','21:00',['IRN','NZL'],'SoFi Stadium','洛杉矶','Grp G',null],
+  ['2026-06-15','21:00',['ARG','ALG'],'Arrowhead Stadium','堪萨斯城','Grp J',null],
   // June 16
-  ['2026-06-16','01:00',['AUT','JOR'],"Levi's Stadium",'旧金山','Grp J',null],
-  ['2026-06-16','14:00',['POR','COD'],'NRG Stadium','休斯顿','Grp K',null],
-  ['2026-06-16','16:00',['FRA','SEN'],'MetLife Stadium','纽约','Grp I',null],
-  ['2026-06-16','17:00',['ENG','CRO'],'AT&T Stadium','达拉斯','Grp L',null],
-  ['2026-06-16','19:00',['IRQ','NOR'],'Gillette Stadium','波士顿','Grp I',null],
-  ['2026-06-16','20:00',['GHA','PAN'],'BMO Field','多伦多','Grp L',null],
-  ['2026-06-16','23:00',['UZB','COL'],'Estadio Banorte','墨西哥城','Grp K',null],
+  ['2026-06-16','00:00',['AUT','JOR'],"Levi's Stadium",'旧金山','Grp J',null],
+  ['2026-06-16','13:00',['POR','COD'],'NRG Stadium','休斯顿','Grp K',null],
+  ['2026-06-16','15:00',['FRA','SEN'],'MetLife Stadium','纽约','Grp I',null],
+  ['2026-06-16','16:00',['ENG','CRO'],'AT&T Stadium','达拉斯','Grp L',null],
+  ['2026-06-16','18:00',['IRQ','NOR'],'Gillette Stadium','波士顿','Grp I',null],
+  ['2026-06-16','19:00',['GHA','PAN'],'BMO Field','多伦多','Grp L',null],
+  ['2026-06-16','22:00',['UZB','COL'],'Estadio Banorte','墨西哥城','Grp K',null],
   // June 18
-  ['2026-06-18','13:00',['CZE','RSA'],'Mercedes-Benz Stadium','亚特兰大','Grp A',null],
-  ['2026-06-18','16:00',['SUI','BIH'],'SoFi Stadium','洛杉矶','Grp B',null],
-  ['2026-06-18','19:00',['CAN','QAT'],'BC Place','温哥华','Grp B',null],
-  ['2026-06-18','22:00',['MEX','KOR'],'Estadio Akron','瓜达拉哈拉','Grp A',null],
+  ['2026-06-18','12:00',['CZE','RSA'],'Mercedes-Benz Stadium','亚特兰大','Grp A',null],
+  ['2026-06-18','15:00',['SUI','BIH'],'SoFi Stadium','洛杉矶','Grp B',null],
+  ['2026-06-18','18:00',['CAN','QAT'],'BC Place','温哥华','Grp B',null],
+  ['2026-06-18','21:00',['MEX','KOR'],'Estadio Akron','瓜达拉哈拉','Grp A',null],
   // June 19
-  ['2026-06-19','16:00',['USA','AUS'],'Lumen Field','西雅图','Grp D',null],
-  ['2026-06-19','19:00',['SCO','MAR'],'Gillette Stadium','波士顿','Grp C',null],
-  ['2026-06-19','21:00',['ECU','CUW'],'Arrowhead Stadium','堪萨斯城','Grp E',null],
-  ['2026-06-19','22:00',['BRA','HAI'],'Lincoln Financial Field','费城','Grp C',null],
-  ['2026-06-19','22:00',['TUR','PAR'],"Levi's Stadium",'旧金山','Grp D',null],
+  ['2026-06-19','15:00',['USA','AUS'],'Lumen Field','西雅图','Grp D',null],
+  ['2026-06-19','18:00',['SCO','MAR'],'Gillette Stadium','波士顿','Grp C',null],
+  ['2026-06-19','20:00',['ECU','CUW'],'Arrowhead Stadium','堪萨斯城','Grp E',null],
+  ['2026-06-19','21:00',['BRA','HAI'],'Lincoln Financial Field','费城','Grp C',null],
+  ['2026-06-19','21:00',['TUR','PAR'],"Levi's Stadium",'旧金山','Grp D',null],
   // June 20
-  ['2026-06-20','14:00',['NED','SWE'],'NRG Stadium','休斯顿','Grp F',null],
-  ['2026-06-20','17:00',['GER','CIV'],'BMO Field','多伦多','Grp E',null],
-  ['2026-06-20','22:00',['TUN','JPN'],'Estadio BBVA','蒙特雷','Grp F',null],
-  ['2026-06-20','22:00',['NZL','EGY'],'BC Place','温哥华','Grp G',null],
+  ['2026-06-20','13:00',['NED','SWE'],'NRG Stadium','休斯顿','Grp F',null],
+  ['2026-06-20','16:00',['GER','CIV'],'BMO Field','多伦多','Grp E',null],
+  ['2026-06-20','21:00',['TUN','JPN'],'Estadio BBVA','蒙特雷','Grp F',null],
+  ['2026-06-20','21:00',['NZL','EGY'],'BC Place','温哥华','Grp G',null],
   // June 21
-  ['2026-06-21','13:00',['ESP','KSA'],'Mercedes-Benz Stadium','亚特兰大','Grp H',null],
-  ['2026-06-21','16:00',['BEL','IRN'],'SoFi Stadium','洛杉矶','Grp G',null],
-  ['2026-06-21','19:00',['URU','CPV'],'Hard Rock Stadium','迈阿密','Grp H',null],
+  ['2026-06-21','12:00',['ESP','KSA'],'Mercedes-Benz Stadium','亚特兰大','Grp H',null],
+  ['2026-06-21','15:00',['BEL','IRN'],'SoFi Stadium','洛杉矶','Grp G',null],
+  ['2026-06-21','18:00',['URU','CPV'],'Hard Rock Stadium','迈阿密','Grp H',null],
   // June 22
-  ['2026-06-22','14:00',['ARG','AUT'],'AT&T Stadium','达拉斯','Grp J',null],
-  ['2026-06-22','18:00',['FRA','IRQ'],'Lincoln Financial Field','费城','Grp I',null],
-  ['2026-06-22','20:00',['PAN','CRO'],'BMO Field','多伦多','Grp L',null],
-  ['2026-06-22','21:00',['NOR','SEN'],'MetLife Stadium','纽约','Grp I',null],
-  ['2026-06-22','23:00',['COL','COD'],'Estadio Akron','瓜达拉哈拉','Grp K',null],
+  ['2026-06-22','13:00',['ARG','AUT'],'AT&T Stadium','达拉斯','Grp J',null],
+  ['2026-06-22','17:00',['FRA','IRQ'],'Lincoln Financial Field','费城','Grp I',null],
+  ['2026-06-22','19:00',['PAN','CRO'],'BMO Field','多伦多','Grp L',null],
+  ['2026-06-22','20:00',['NOR','SEN'],'MetLife Stadium','纽约','Grp I',null],
+  ['2026-06-22','22:00',['COL','COD'],'Estadio Akron','瓜达拉哈拉','Grp K',null],
   // June 23
-  ['2026-06-23','14:00',['POR','UZB'],'NRG Stadium','休斯顿','Grp K',null],
-  ['2026-06-23','17:00',['ENG','GHA'],'Gillette Stadium','波士顿','Grp L',null],
-  ['2026-06-23','20:00',['JOR','ALG'],"Levi's Stadium",'旧金山','Grp J',null],
+  ['2026-06-23','13:00',['POR','UZB'],'NRG Stadium','休斯顿','Grp K',null],
+  ['2026-06-23','16:00',['ENG','GHA'],'Gillette Stadium','波士顿','Grp L',null],
+  ['2026-06-23','19:00',['JOR','ALG'],"Levi's Stadium",'旧金山','Grp J',null],
   // June 24
-  ['2026-06-24','16:00',['SUI','CAN'],'BC Place','温哥华','Grp B',null],
-  ['2026-06-24','16:00',['BIH','QAT'],'Lumen Field','西雅图','Grp B',null],
-  ['2026-06-24','19:00',['SCO','BRA'],'Hard Rock Stadium','迈阿密','Grp C',null],
-  ['2026-06-24','19:00',['MAR','HAI'],'Mercedes-Benz Stadium','亚特兰大','Grp C',null],
-  ['2026-06-24','20:00',['JPN','SWE'],'AT&T Stadium','达拉斯','Grp F',null],
-  ['2026-06-24','20:00',['TUN','NED'],'Arrowhead Stadium','堪萨斯城','Grp F',null],
-  ['2026-06-24','22:00',['CZE','MEX'],'Estadio Banorte','墨西哥城','Grp A',null],
-  ['2026-06-24','22:00',['RSA','KOR'],'Estadio BBVA','蒙特雷','Grp A',null],
-  ['2026-06-24','23:00',['TUR','USA'],'SoFi Stadium','洛杉矶','Grp D',null],
-  ['2026-06-24','23:00',['PAR','AUS'],"Levi's Stadium",'旧金山','Grp D',null],
+  ['2026-06-24','15:00',['SUI','CAN'],'BC Place','温哥华','Grp B',null],
+  ['2026-06-24','15:00',['BIH','QAT'],'Lumen Field','西雅图','Grp B',null],
+  ['2026-06-24','18:00',['SCO','BRA'],'Hard Rock Stadium','迈阿密','Grp C',null],
+  ['2026-06-24','18:00',['MAR','HAI'],'Mercedes-Benz Stadium','亚特兰大','Grp C',null],
+  ['2026-06-24','19:00',['JPN','SWE'],'AT&T Stadium','达拉斯','Grp F',null],
+  ['2026-06-24','19:00',['TUN','NED'],'Arrowhead Stadium','堪萨斯城','Grp F',null],
+  ['2026-06-24','21:00',['CZE','MEX'],'Estadio Banorte','墨西哥城','Grp A',null],
+  ['2026-06-24','21:00',['RSA','KOR'],'Estadio BBVA','蒙特雷','Grp A',null],
+  ['2026-06-24','22:00',['TUR','USA'],'SoFi Stadium','洛杉矶','Grp D',null],
+  ['2026-06-24','22:00',['PAR','AUS'],"Levi's Stadium",'旧金山','Grp D',null],
   // June 25
-  ['2026-06-25','17:00',['ECU','GER'],'MetLife Stadium','纽约','Grp E',null],
-  ['2026-06-25','17:00',['CUW','CIV'],'Lincoln Financial Field','费城','Grp E',null],
-  ['2026-06-25','21:00',['CPV','KSA'],'NRG Stadium','休斯顿','Grp H',null],
-  ['2026-06-25','21:00',['URU','ESP'],'Estadio Akron','瓜达拉哈拉','Grp H',null],
+  ['2026-06-25','16:00',['ECU','GER'],'MetLife Stadium','纽约','Grp E',null],
+  ['2026-06-25','16:00',['CUW','CIV'],'Lincoln Financial Field','费城','Grp E',null],
+  ['2026-06-25','20:00',['CPV','KSA'],'NRG Stadium','休斯顿','Grp H',null],
+  ['2026-06-25','20:00',['URU','ESP'],'Estadio Akron','瓜达拉哈拉','Grp H',null],
   // June 26
-  ['2026-06-26','00:00',['EGY','IRN'],'Lumen Field','西雅图','Grp G',null],
-  ['2026-06-26','00:00',['NZL','BEL'],'BC Place','温哥华','Grp G',null],
-  ['2026-06-26','16:00',['NOR','FRA'],'Gillette Stadium','波士顿','Grp I',null],
-  ['2026-06-26','16:00',['SEN','IRQ'],'BMO Field','多伦多','Grp I',null],
-  ['2026-06-26','20:30',['COL','POR'],'Hard Rock Stadium','迈阿密','Grp K',null],
-  ['2026-06-26','20:30',['COD','UZB'],'Mercedes-Benz Stadium','亚特兰大','Grp K',null],
-  ['2026-06-26','23:00',['ALG','AUT'],'Arrowhead Stadium','堪萨斯城','Grp J',null],
-  ['2026-06-26','23:00',['JOR','ARG'],'AT&T Stadium','达拉斯','Grp J',null],
+  ['2026-06-26','-1:00',['EGY','IRN'],'Lumen Field','西雅图','Grp G',null],
+  ['2026-06-26','-1:00',['NZL','BEL'],'BC Place','温哥华','Grp G',null],
+  ['2026-06-26','15:00',['NOR','FRA'],'Gillette Stadium','波士顿','Grp I',null],
+  ['2026-06-26','15:00',['SEN','IRQ'],'BMO Field','多伦多','Grp I',null],
+  ['2026-06-26','19:30',['COL','POR'],'Hard Rock Stadium','迈阿密','Grp K',null],
+  ['2026-06-26','19:30',['COD','UZB'],'Mercedes-Benz Stadium','亚特兰大','Grp K',null],
+  ['2026-06-26','22:00',['ALG','AUT'],'Arrowhead Stadium','堪萨斯城','Grp J',null],
+  ['2026-06-26','22:00',['JOR','ARG'],'AT&T Stadium','达拉斯','Grp J',null],
   // June 27
-  ['2026-06-27','18:00',['PAN','ENG'],'MetLife Stadium','纽约','Grp L',null],
-  ['2026-06-27','18:00',['CRO','GHA'],'Lincoln Financial Field','费城','Grp L',null],
+  ['2026-06-27','17:00',['PAN','ENG'],'MetLife Stadium','纽约','Grp L',null],
+  ['2026-06-27','17:00',['CRO','GHA'],'Lincoln Financial Field','费城','Grp L',null],
 
   // === ROUND OF 32 ===
-  ['2026-06-28','15:00',['TBD','TBD'],'SoFi Stadium','洛杉矶','R32',null,'2A vs 2B'],
-  ['2026-06-29','13:00',['TBD','TBD'],'NRG Stadium','休斯顿','R32',null,'1C vs 2F'],
-  ['2026-06-29','16:30',['TBD','TBD'],'Gillette Stadium','波士顿','R32',null,'1E vs 3ACDF'],
-  ['2026-06-29','20:00',['TBD','TBD'],'Estadio BBVA','蒙特雷','R32',null,'1F vs 2C'],
-  ['2026-06-29','21:00',['TBD','TBD'],'Estadio Banorte','墨西哥城','R32',null,'1A vs 3CEFHI'],
-  ['2026-06-30','13:00',['TBD','TBD'],'AT&T Stadium','达拉斯','R32',null,'2E vs 2I'],
-  ['2026-06-30','17:00',['TBD','TBD'],'MetLife Stadium','纽约','R32',null,'1I vs 3CDFGH'],
-  ['2026-06-30','20:00',['TBD','TBD'],"Levi's Stadium",'旧金山','R32',null,'1D vs 3BEFIJ'],
-  ['2026-07-01','12:00',['TBD','TBD'],'Mercedes-Benz Stadium','亚特兰大','R32',null,'1L vs 3EHIJK'],
-  ['2026-07-01','16:00',['TBD','TBD'],'Lumen Field','西雅图','R32',null,'1G vs 3AEHIJ'],
-  ['2026-07-02','15:00',['TBD','TBD'],'SoFi Stadium','洛杉矶','R32',null,'1H vs 2J'],
-  ['2026-07-02','19:00',['TBD','TBD'],'BMO Field','多伦多','R32',null,'2K vs 2L'],
-  ['2026-07-02','23:00',['TBD','TBD'],'BC Place','温哥华','R32',null,'1B vs 3EFGIJ'],
-  ['2026-07-03','14:00',['TBD','TBD'],'AT&T Stadium','达拉斯','R32',null,'2D vs 2G'],
-  ['2026-07-03','18:00',['TBD','TBD'],'Hard Rock Stadium','迈阿密','R32',null,'1J vs 2H'],
-  ['2026-07-03','21:30',['TBD','TBD'],'Arrowhead Stadium','堪萨斯城','R32',null,'1K vs 3DEIJL'],
+  ['2026-06-28','14:00',['TBD','TBD'],'SoFi Stadium','洛杉矶','R32',null,'2A vs 2B'],
+  ['2026-06-29','12:00',['TBD','TBD'],'NRG Stadium','休斯顿','R32',null,'1C vs 2F'],
+  ['2026-06-29','15:30',['TBD','TBD'],'Gillette Stadium','波士顿','R32',null,'1E vs 3ACDF'],
+  ['2026-06-29','19:00',['TBD','TBD'],'Estadio BBVA','蒙特雷','R32',null,'1F vs 2C'],
+  ['2026-06-29','20:00',['TBD','TBD'],'Estadio Banorte','墨西哥城','R32',null,'1A vs 3CEFHI'],
+  ['2026-06-30','12:00',['TBD','TBD'],'AT&T Stadium','达拉斯','R32',null,'2E vs 2I'],
+  ['2026-06-30','16:00',['TBD','TBD'],'MetLife Stadium','纽约','R32',null,'1I vs 3CDFGH'],
+  ['2026-06-30','19:00',['TBD','TBD'],"Levi's Stadium",'旧金山','R32',null,'1D vs 3BEFIJ'],
+  ['2026-07-01','11:00',['TBD','TBD'],'Mercedes-Benz Stadium','亚特兰大','R32',null,'1L vs 3EHIJK'],
+  ['2026-07-01','15:00',['TBD','TBD'],'Lumen Field','西雅图','R32',null,'1G vs 3AEHIJ'],
+  ['2026-07-02','14:00',['TBD','TBD'],'SoFi Stadium','洛杉矶','R32',null,'1H vs 2J'],
+  ['2026-07-02','18:00',['TBD','TBD'],'BMO Field','多伦多','R32',null,'2K vs 2L'],
+  ['2026-07-02','22:00',['TBD','TBD'],'BC Place','温哥华','R32',null,'1B vs 3EFGIJ'],
+  ['2026-07-03','13:00',['TBD','TBD'],'AT&T Stadium','达拉斯','R32',null,'2D vs 2G'],
+  ['2026-07-03','17:00',['TBD','TBD'],'Hard Rock Stadium','迈阿密','R32',null,'1J vs 2H'],
+  ['2026-07-03','20:30',['TBD','TBD'],'Arrowhead Stadium','堪萨斯城','R32',null,'1K vs 3DEIJL'],
 
   // === ROUND OF 16 ===
-  ['2026-07-05','15:00',['TBD','TBD'],'NRG Stadium','休斯顿','R16',null,'W73 vs W76'],
-  ['2026-07-05','19:00',['TBD','TBD'],'SoFi Stadium','洛杉矶','R16',null,'W74 vs W78'],
-  ['2026-07-05','21:00',['TBD','TBD'],'MetLife Stadium','纽约','R16',null,'W75 vs W77'],
-  ['2026-07-06','18:00',['TBD','TBD'],'Lincoln Financial Field','费城','R16',null,'W79 vs W81'],
-  ['2026-07-06','21:00',['TBD','TBD'],'Lumen Field','西雅图','R16',null,'W80 vs W82'],
-  ['2026-07-07','17:00',['TBD','TBD'],'AT&T Stadium','达拉斯','R16',null,'W83 vs W84'],
-  ['2026-07-07','21:00',['TBD','TBD'],'Mercedes-Benz Stadium','亚特兰大','R16',null,'W85 vs W88'],
-  ['2026-07-09','21:00',['TBD','TBD'],'Gillette Stadium','波士顿','R16',null,'W86 vs W87'],
+  ['2026-07-05','14:00',['TBD','TBD'],'NRG Stadium','休斯顿','R16',null,'W73 vs W76'],
+  ['2026-07-05','18:00',['TBD','TBD'],'SoFi Stadium','洛杉矶','R16',null,'W74 vs W78'],
+  ['2026-07-05','20:00',['TBD','TBD'],'MetLife Stadium','纽约','R16',null,'W75 vs W77'],
+  ['2026-07-06','17:00',['TBD','TBD'],'Lincoln Financial Field','费城','R16',null,'W79 vs W81'],
+  ['2026-07-06','20:00',['TBD','TBD'],'Lumen Field','西雅图','R16',null,'W80 vs W82'],
+  ['2026-07-07','16:00',['TBD','TBD'],'AT&T Stadium','达拉斯','R16',null,'W83 vs W84'],
+  ['2026-07-07','20:00',['TBD','TBD'],'Mercedes-Benz Stadium','亚特兰大','R16',null,'W85 vs W88'],
+  ['2026-07-09','20:00',['TBD','TBD'],'Gillette Stadium','波士顿','R16',null,'W86 vs W87'],
 
   // === QUARTER-FINALS ===
-  ['2026-07-10','18:00',['TBD','TBD'],'Gillette Stadium','波士顿','QF',null,'W89 vs W90'],
-  ['2026-07-10','19:00',['TBD','TBD'],'SoFi Stadium','洛杉矶','QF',null,'W91 vs W92'],
-  ['2026-07-11','16:00',['TBD','TBD'],'Hard Rock Stadium','迈阿密','QF',null,'W93 vs W94'],
-  ['2026-07-11','21:00',['TBD','TBD'],'Arrowhead Stadium','堪萨斯城','QF',null,'W95 vs W96'],
+  ['2026-07-10','17:00',['TBD','TBD'],'Gillette Stadium','波士顿','QF',null,'W89 vs W90'],
+  ['2026-07-10','18:00',['TBD','TBD'],'SoFi Stadium','洛杉矶','QF',null,'W91 vs W92'],
+  ['2026-07-11','15:00',['TBD','TBD'],'Hard Rock Stadium','迈阿密','QF',null,'W93 vs W94'],
+  ['2026-07-11','20:00',['TBD','TBD'],'Arrowhead Stadium','堪萨斯城','QF',null,'W95 vs W96'],
 
   // === SEMI-FINALS ===
-  ['2026-07-14','20:00',['TBD','TBD'],'AT&T Stadium','达拉斯','SF',null,'W97 vs W98'],
-  ['2026-07-15','20:00',['TBD','TBD'],'Mercedes-Benz Stadium','亚特兰大','SF',null,'W99 vs W100'],
+  ['2026-07-14','19:00',['TBD','TBD'],'AT&T Stadium','达拉斯','SF',null,'W97 vs W98'],
+  ['2026-07-15','19:00',['TBD','TBD'],'Mercedes-Benz Stadium','亚特兰大','SF',null,'W99 vs W100'],
 
   // === THIRD PLACE ===
-  ['2026-07-18','16:00',['TBD','TBD'],'Hard Rock Stadium','迈阿密','3rd',null,'L101 vs L102'],
+  ['2026-07-18','15:00',['TBD','TBD'],'Hard Rock Stadium','迈阿密','3rd',null,'L101 vs L102'],
 
   // === FINAL ===
-  ['2026-07-19','16:00',['TBD','TBD'],'MetLife Stadium','纽约','Final',null,'W101 vs W102'],
+  ['2026-07-19','15:00',['TBD','TBD'],'MetLife Stadium','纽约','Final',null,'W101 vs W102'],
 ];
 
 // ===== BUILD MATCHES =====
@@ -813,7 +813,12 @@ function renderMatch(m) {
   let isLive = !isDone && (m.timestamp <= now) && (m.timestamp + 7200000 > now);
   let cls = 'match-card' + (isDone?' done':'') + (isLive?' live':'') + (!isDone && !isLive?' upcoming':'') + (m.isKnockout?' knockout':'');
 
-  let timeStr = m.time;
+  // Convert ET to BJT (Beijing Time = ET + 12h)
+  let etHour = parseInt(m.time.split(':')[0]);
+  let etMin = m.time.split(':')[1];
+  let bjtHour = (etHour + 12) % 24;
+  let bjtDate = bjtHour < etHour ? new Date(m.date + 'T00:00:00Z').getTime() + 86400000 : new Date(m.date + 'T00:00:00Z').getTime();
+  let timeStr = `${bjtHour.toString().padStart(2,'0')}:${etMin}`;
   let dateObj = new Date(m.date);
   let month = dateObj.toLocaleString('zh-CN',{month:'numeric'})+'月';
   let day = dateObj.getDate();
@@ -889,7 +894,7 @@ function renderMatch(m) {
 
   return `<div class="${cls}">
     <div class="match-time-col">
-      <div class="time">${month} ${day} · ${timeStr}</div>
+      <div class="time">${month} ${day} · ${timeStr} <span style="font-size:0.65rem;font-weight:400;color:var(--text-muted)">BJ</span></div>
       <div class="round-badge">${roundLabel}</div>
       ${statusHtml}
       <div class="venue">${venueShort}</div>
