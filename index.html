@@ -838,9 +838,13 @@ function renderMatch(m) {
   let bjtHour = (etHour + 12) % 24;
   let timeBjt = `${bjtHour.toString().padStart(2,'0')}:${etMin}`;
 
+  // BJT日期：BJ凌晨(0-11点)比ET日期多一天
   let dateObj = new Date(m.date);
-  let month = dateObj.getMonth() + 1;
-  let day = dateObj.getDate();
+  let bjtDateOffset = (bjtHour < 12) ? 1 : 0;
+  let bjtDate = new Date(dateObj);
+  bjtDate.setDate(bjtDate.getDate() + bjtDateOffset);
+  let month = bjtDate.getMonth() + 1;
+  let day = bjtDate.getDate();
   // Home flag
   let homeFlagHtml = '<span style="font-size:32px;line-height:1">❓</span>';
   if (!isTBD) {
