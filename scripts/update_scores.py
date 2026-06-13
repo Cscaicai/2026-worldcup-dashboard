@@ -57,6 +57,16 @@ def parse_espn_scores(data):
             if len(competitors) < 2:
                 continue
             
+            # 检查比赛状态：只有已完赛(FINAL)才记录比分
+            status_type = event.get("status", {}).get("type", {}).get("name", "")
+            status_desc = event.get("status", {}).get("type", {}).get("description", "")
+            # ESPN状态: "STATUS_FINAL" = 已完赛, "STATUS_SCHEDULED" = 未开始, "STATUS_IN_PROGRESS" = 进行中
+            is_final = "final" in status_type.lower() or "STATUS_FINAL" in status_type
+            
+            if not is_final:
+                print(f"  ⏳ 跳过 {event.get('name','')} ({status_desc}) - 比赛尚未结束")
+                continue
+            
             # 找到主客队
             home_team = away_team = None
             for c in competitors:
