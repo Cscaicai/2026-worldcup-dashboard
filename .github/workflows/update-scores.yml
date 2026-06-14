@@ -1,9 +1,14 @@
-name: 自动更新比分
+name: 自动更新比分 v2
 
 on:
-  # 定时运行：每天 4次（美东时间 0点/6点/12点/18点 = UTC 4/10/16/22）
+  # 赛时高频轮询：每30分钟 (覆盖所有比赛窗口)
+  # 比赛在北京时间凌晨3点到下午2点之间 = UTC 19:00 ~ UTC 06:00
+  # 加宽覆盖：从UTC 16:00到UTC 10:00确保无遗漏
   schedule:
-    - cron: '0 4,10,16,22 * * *'
+    - cron: '*/30 16-23 * 6 *'   # 6月 UTC 16-23点（每30分钟）
+    - cron: '*/30 0-10 * 6 *'    # 6月 UTC 0-10点（每30分钟）
+    - cron: '*/30 16-23 * 7 *'   # 7月 UTC 16-23点（每30分钟）
+    - cron: '*/30 0-10 * 7 *'    # 7月 UTC 0-10点（每30分钟）
   # 也可以手动触发
   workflow_dispatch:
 
@@ -24,7 +29,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: 运行比分更新脚本
+      - name: 运行比分更新脚本 (双源验证)
         run: python scripts/update_scores.py
 
       - name: 检查是否有变更
@@ -43,6 +48,6 @@ jobs:
         run: |
           git config user.name "World Cup Bot"
           git config user.email "bot@cscaicai.github.io"
-          git add index.html
+          git add index.html scripts/update_scores.py
           git commit -m "⚽ 自动更新比分 - $(date '+%Y-%m-%d %H:%M UTC')"
           git push
