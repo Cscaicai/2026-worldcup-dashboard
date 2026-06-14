@@ -716,10 +716,8 @@ const matches = RAW_MATCHES.map(r => {
   let d = new Date(m.date + 'T' + (m.time[0]==='0'&&m.time[1]==='0'?'00':m.time) + ':00-04:00'); // ET = UTC-4
   m.timestamp = d.getTime();
   m.isKnockout = !m.round.startsWith('Grp');
-  // Score prediction
-  if (m.result) {
-    m.pred = {score:m.result, reliability:100};
-  } else if (m.teams[0] === 'TBD') {
+  // Score prediction (永不覆盖，已赛/未赛都用genPred生成)
+  if (m.teams[0] === 'TBD') {
     m.pred = {score:[0,0], reliability:0};
   } else {
     let hRank = rankByCode(m.teams[0]);
