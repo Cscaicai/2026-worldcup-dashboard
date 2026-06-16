@@ -425,23 +425,23 @@ const GROUP_DATA = {
   'E':[
     {name:'德国',code:'GER',flag:'🇩🇪',rank:10,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
     {name:'厄瓜多尔',code:'ECU',flag:'🇪🇨',rank:23,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-    {name:'科特迪瓦',code:'CIV',flag:'🇨🇮',rank:34,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'科特迪瓦',code:'CIV',flag:'🇨🇮',rank:34,mp:1,w:1,d:0,l:0,gf:1,ga:0,pts:3},
     {name:'库拉索',code:'CUW',flag:'🇨🇼',rank:82,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
   ],
   'F':[
-    {name:'荷兰',code:'NED',flag:'🇳🇱',rank:7,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-    {name:'日本',code:'JPN',flag:'🇯🇵',rank:18,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'荷兰',code:'NED',flag:'🇳🇱',rank:7,mp:1,w:0,d:1,l:0,gf:2,ga:2,pts:1},
+    {name:'日本',code:'JPN',flag:'🇯🇵',rank:18,mp:1,w:0,d:1,l:0,gf:2,ga:2,pts:1},
     {name:'瑞典',code:'SWE',flag:'🇸🇪',rank:38,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
     {name:'突尼斯',code:'TUN',flag:'🇹🇳',rank:44,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
   ],
   'G':[
     {name:'比利时',code:'BEL',flag:'🇧🇪',rank:9,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-    {name:'埃及',code:'EGY',flag:'🇪🇬',rank:29,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'埃及',code:'EGY',flag:'🇪🇬',rank:29,mp:1,w:0,d:1,l:0,gf:1,ga:1,pts:1},
     {name:'伊朗',code:'IRN',flag:'🇮🇷',rank:21,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
     {name:'新西兰',code:'NZL',flag:'🇳🇿',rank:89,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
   ],
   'H':[
-    {name:'西班牙',code:'ESP',flag:'🇪🇸',rank:2,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+    {name:'西班牙',code:'ESP',flag:'🇪🇸',rank:2,mp:1,w:0,d:1,l:0,gf:0,ga:0,pts:1},
     {name:'乌拉圭',code:'URU',flag:'🇺🇾',rank:17,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
     {name:'沙特',code:'KSA',flag:'🇸🇦',rank:61,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
     {name:'佛得角',code:'CPV',flag:'🇨🇻',rank:69,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
@@ -582,17 +582,17 @@ const RAW_MATCHES = [
   // June 13
   ['2026-06-13','15:00',['QAT','SUI'],"Levi's Stadium",'旧金山','Grp B',[1,1]],
   ['2026-06-13','18:00',['BRA','MAR'],'MetLife Stadium','纽约','Grp C',[1,1]],
-  ['2026-06-14','19:00',['CIV','ECU'],'Lincoln Financial Field','费城','Grp E',null],
+  ['2026-06-14','19:00',['CIV','ECU'],'Lincoln Financial Field','费城','Grp E',[1,0]],
   ['2026-06-13','21:00',['HAI','SCO'],'Gillette Stadium','波士顿','Grp C',[0,1]],
-  ['2026-06-14','22:00',['SWE','TUN'],'Estadio BBVA','蒙特雷','Grp F',null],
+  ['2026-06-14','22:00',['SWE','TUN'],'Estadio BBVA','蒙特雷','Grp F',[5,1]],
   // June 14
-  ['2026-06-14','00:00',['AUS','TUR'],'BC Place','温哥华','Grp D',null],
-  ['2026-06-14','13:00',['GER','CUW'],'NRG Stadium','休斯顿','Grp E',null],
-  ['2026-06-14','16:00',['NED','JPN'],'AT&T Stadium','达拉斯','Grp F',null],
+  ['2026-06-14','00:00',['AUS','TUR'],'BC Place','温哥华','Grp D',[2,0]],
+  ['2026-06-14','13:00',['GER','CUW'],'NRG Stadium','休斯顿','Grp E',[7,1]],
+  ['2026-06-14','16:00',['NED','JPN'],'AT&T Stadium','达拉斯','Grp F',[2,2]],
   // June 15
-  ['2026-06-15','12:00',['ESP','CPV'],'Mercedes-Benz Stadium','亚特兰大','Grp H',null],
-  ['2026-06-15','15:00',['BEL','EGY'],'Lumen Field','西雅图','Grp G',null],
-  ['2026-06-15','18:00',['KSA','URU'],'Hard Rock Stadium','迈阿密','Grp H',null],
+  ['2026-06-15','12:00',['ESP','CPV'],'Mercedes-Benz Stadium','亚特兰大','Grp H',[0,0]],
+  ['2026-06-15','15:00',['BEL','EGY'],'Lumen Field','西雅图','Grp G',[1,1]],
+  ['2026-06-15','18:00',['KSA','URU'],'Hard Rock Stadium','迈阿密','Grp H',[1,1]],
   ['2026-06-15','21:00',['IRN','NZL'],'SoFi Stadium','洛杉矶','Grp G',null],
   ['2026-06-15','21:00',['ARG','ALG'],'Arrowhead Stadium','堪萨斯城','Grp J',null],
   // June 16
