@@ -56,12 +56,15 @@ def fetch_espn_for_date(date_str=None):
     for event in data["events"]:
         try:
             name = event.get("name", "?")
-            status = event.get("status", {}).get("type", {}).get("name", "")
-            desc = event.get("status", {}).get("type", {}).get("description", "")
-            is_final = "final" in status.lower() or status == "STATUS_FINAL"
+            status = event.get("status", {}).get("type", {})
+            status_name = status.get("name", "")
+            status_desc = status.get("description", "")
+            completed = status.get("completed", False)
+            # ESPN足球用STATUS_FULL_TIME(不是STATUS_FINAL)
+            is_final = completed or "full_time" in status_name.lower() or "final" in status_name.lower()
             
             if not is_final:
-                print(f"  ⏳ {name} ({desc}) - 跳过")
+                print(f"  ⏳ {name} ({status_desc}) - 跳过")
                 continue
             
             comp = event.get("competitions", [{}])[0]
